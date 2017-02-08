@@ -13,12 +13,12 @@ namespace CheckMaster
     class ModuleManager
     {
         private List<Module> modules;
-        private bool hasErrors;
+        private Dictionary<Module, Status> statuses;
 
         public ModuleManager()
         {
             this.modules = new List<Module>();
-            this.hasErrors = false;
+            this.statuses = new Dictionary<Module, Status>();
         }
 
         public void init()
@@ -31,20 +31,23 @@ namespace CheckMaster
 
         public void check()
         {
+            this.statuses.Clear();
             foreach (Module module in modules)
             {
                 module.check();
 
-                if (module.getStatus() == Status.ERROR || module.getStatus() == Status.FAIL)
-                {
-                    this.hasErrors = true;
-                }
+                this.statuses.Add(module, module.getStatus());
             }
         }
 
         public bool failed()
         {
-            return this.hasErrors;
+            if (this.statuses.Count == 0)
+            {
+                return false;
+            }
+
+            return this.statuses.ContainsValue(Status.ERROR) || this.statuses.ContainsValue(Status.FAIL);
         }
     }
 }

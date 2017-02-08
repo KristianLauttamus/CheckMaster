@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -18,6 +19,7 @@ namespace CheckMaster
         Serializer serializer;
         ModuleManager moduleManager;
         String FILE_PATH = Application.StartupPath + "/default.settings";
+        ObservableCollection<Module> statuses; 
 
         public CheckMasterForm()
         {
@@ -64,7 +66,6 @@ namespace CheckMaster
 
                 // Access UI elements
                 MethodInvoker mi = delegate () {
-                    
                 };
 
                 this.Invoke(mi);

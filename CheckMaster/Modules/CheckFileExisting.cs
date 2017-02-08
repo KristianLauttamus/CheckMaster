@@ -10,7 +10,7 @@ namespace CheckMaster.Modules
     [Serializable]
     class CheckFileExisting : Module
     {
-        private String file;
+        private String FILE_PATH;
         private Status status;
         private String name;
 
@@ -27,7 +27,7 @@ namespace CheckMaster.Modules
 
         public void check()
         {
-            if (File.Exists(file))
+            if (File.Exists(FILE_PATH))
             {
                 status = Status.OK;
             }

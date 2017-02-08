@@ -31,7 +31,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.howManyRanLabel = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.statusList = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // button1
@@ -61,20 +61,24 @@
             this.howManyRanLabel.TabIndex = 2;
             this.howManyRanLabel.Text = "Ran 0 modules";
             // 
-            // listBox1
+            // statusList
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(13, 56);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(166, 199);
-            this.listBox1.TabIndex = 3;
+            this.statusList.BackColor = System.Drawing.SystemColors.Control;
+            this.statusList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.statusList.FormattingEnabled = true;
+            this.statusList.Location = new System.Drawing.Point(13, 56);
+            this.statusList.Name = "statusList";
+            this.statusList.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.statusList.Size = new System.Drawing.Size(166, 195);
+            this.statusList.TabIndex = 3;
+            this.statusList.TabStop = false;
             // 
             // CheckMasterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(460, 292);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.statusList);
             this.Controls.Add(this.howManyRanLabel);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -94,7 +98,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label howManyRanLabel;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox statusList;
     }
 }
 

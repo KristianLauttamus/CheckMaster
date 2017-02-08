@@ -54,8 +54,10 @@
     </Compile>
     <Compile Include="Modules\CheckFileExisting.cs" />
     <Compile Include="Modules\Module.cs" />
+    <Compile Include="Modules\ReadFileAndCheckFor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Restrictions\Restriction.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="ModuleManager.cs" />
     <Compile Include="Status.cs" />

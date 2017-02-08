@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CheckMaster.Modules
+namespace CheckMaster.Restrictions
 {
-    interface Module
+    interface Restriction
     {
-        string getName();
         void init();
-        void check();
-        Status getStatus();
-        string[] getErrors();
+        bool approved();
     }
 }
