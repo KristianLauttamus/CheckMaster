@@ -1,4 +1,5 @@
 ﻿using CheckMaster.Modules;
+using CheckMaster.SuccessModules;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,11 +15,13 @@ namespace CheckMaster
     class ModuleManager
     {
         private List<Module> modules;
+        private List<SuccessModule> successModules;
         private Dictionary<Module, Status> statuses;
 
         public ModuleManager()
         {
             this.modules = new List<Module>();
+            this.successModules = new List<SuccessModule>();
             this.statuses = new Dictionary<Module, Status>();
         }
 
@@ -50,6 +53,14 @@ namespace CheckMaster
             }
 
             return this.statuses.ContainsValue(Status.ERROR) || this.statuses.ContainsValue(Status.FAIL);
+        }
+
+        public void runSuccess()
+        {
+            foreach (SuccessModule successModule in successModules)
+            {
+                successModule.run();
+            }
         }
     }
 }

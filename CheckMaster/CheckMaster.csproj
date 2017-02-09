@@ -53,11 +53,17 @@
     <Compile Include="CheckMasterForm.Designer.cs">
       <DependentUpon>CheckMasterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EditModules.cs">
+    <Compile Include="ComputerInfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EditModules.Designer.cs">
-      <DependentUpon>EditModules.cs</DependentUpon>
+    <Compile Include="ComputerInfoForm.Designer.cs">
+      <DependentUpon>ComputerInfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditModulesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditModulesForm.Designer.cs">
+      <DependentUpon>EditModulesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Modules\CheckFileExisting.cs" />
     <Compile Include="Modules\Module.cs" />
@@ -70,13 +76,17 @@
     <Compile Include="ModuleManager.cs" />
     <Compile Include="Status.cs" />
     <Compile Include="SuccessModules\EnterMBAM.cs" />
+    <Compile Include="SuccessModules\ShutDownComputer.cs" />
     <Compile Include="SuccessModules\SuccessModule.cs" />
     <Compile Include="WMIController.cs" />
     <EmbeddedResource Include="CheckMasterForm.resx">
       <DependentUpon>CheckMasterForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EditModules.resx">
-      <DependentUpon>EditModules.cs</DependentUpon>
+    <EmbeddedResource Include="ComputerInfoForm.resx">
+      <DependentUpon>ComputerInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditModulesForm.resx">
+      <DependentUpon>EditModulesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

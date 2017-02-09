@@ -19,12 +19,12 @@ namespace CheckMaster.Restrictions
             this.computersystem = new Dictionary<string, string>();
         }
 
-        public bool approved()
+        public override bool approved()
         {
             return true;
         }
 
-        public void init()
+        public override void init()
         {
             computersystem = WMIController.getComputerSystemInfo();
         }

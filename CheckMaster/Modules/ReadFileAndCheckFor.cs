@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CheckMaster.Restrictions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,11 @@ namespace CheckMaster.Modules
     class ReadFileAndCheckFor : Module
     {
         public String FILE_PATH;
+
+        public ReadFileAndCheckFor()
+        {
+            this.FILE_PATH = "";
+        }
 
         public void check()
         {
@@ -42,14 +48,47 @@ namespace CheckMaster.Modules
             throw new NotImplementedException();
         }
 
-        public override string ToString()
+        #region Restrictions
+        private List<Restriction> restrictions = new List<Restriction>();
+
+        public void addRestriction(Restriction restriction)
         {
-            if (this.getName() != "")
+            this.restrictions.Add(restriction);
+        }
+
+        public void removeRestriction(int index)
+        {
+            this.restrictions.RemoveAt(index);
+        }
+
+        public void initRestrictions()
+        {
+            foreach (Restriction restriction in this.restrictions)
             {
-                return this.getName();
+                restriction.init();
+            }
+        }
+
+        public bool isRestricted()
+        {
+            foreach (Restriction restriction in this.restrictions)
+            {
+                if (restriction.approved() == false)
+                    return true;
             }
 
-            return "Read File Lines";
+            return false;
+        }
+
+        public List<Restriction> getRestrictions()
+        {
+            return this.restrictions;
+        }
+        #endregion
+
+        public override string ToString()
+        {
+            return "File Exists";
         }
     }
 }

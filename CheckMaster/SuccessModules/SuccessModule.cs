@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CheckMaster.Restrictions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,15 @@ namespace CheckMaster.SuccessModules
 {
     interface SuccessModule
     {
-        string getName();
         Control[] getEditControls();
+        void run();
+
+        #region Restrictions
+        void addRestriction(Restriction restriction);
+        void removeRestriction(int index);
+        void initRestrictions();
+        bool isRestricted();
+        List<Restriction> getRestrictions();
+        #endregion
     }
 }

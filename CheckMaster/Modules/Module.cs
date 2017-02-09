@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CheckMaster.Restrictions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,11 +10,18 @@ namespace CheckMaster.Modules
 {
     interface Module
     {
-        string getName();
         void init();
         void check();
         Status getStatus();
         string[] getErrors();
         Control[] getEditControls();
+
+        #region Restrictions
+        void addRestriction(Restriction restriction);
+        void removeRestriction(int index);
+        void initRestrictions();
+        bool isRestricted();
+        List<Restriction> getRestrictions();
+        #endregion
     }
 }

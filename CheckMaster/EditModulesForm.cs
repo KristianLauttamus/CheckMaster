@@ -14,12 +14,12 @@ using System.Windows.Forms;
 
 namespace CheckMaster
 {
-    public partial class EditModules : Form
+    public partial class EditModulesForm : Form
     {
         List<Modules.Module> modules;
         List<SuccessModule> successModules;
 
-        public EditModules()
+        public EditModulesForm()
         {
             modules = new List<Modules.Module>();
             successModules = new List<SuccessModule>();
@@ -121,11 +121,22 @@ namespace CheckMaster
             if (addedSuccessModulesList.SelectedIndex == -1)
             {
                 clearEditPanel();
+                this.removeSuccessModuleButton.Enabled = false;
                 return;
             }
 
             SuccessModule sm = (SuccessModule)addedSuccessModulesList.Items[addedSuccessModulesList.SelectedIndex];
             loadSuccessModule(sm);
+            this.removeSuccessModuleButton.Enabled = true;
+        }
+
+        private void removeSuccessModuleButton_Click(object sender, EventArgs e)
+        {
+            if (addedSuccessModulesList.SelectedIndex > -1)
+            {
+                addedSuccessModulesList.Items.RemoveAt(addedSuccessModulesList.SelectedIndex);
+                addedSuccessModulesList.SelectedIndex = -1;
+            }
         }
         #endregion
 

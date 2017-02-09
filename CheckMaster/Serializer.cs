@@ -36,7 +36,7 @@ namespace CheckMaster
             }
             catch (Exception ex)
             {
-                //Log exception here
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -75,7 +75,7 @@ namespace CheckMaster
             }
             catch (Exception ex)
             {
-                //Log exception here
+                Console.WriteLine(ex.Message);
             }
 
             return objectOut;

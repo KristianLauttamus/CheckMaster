@@ -20,7 +20,6 @@ namespace CheckMaster
         Serializer serializer;
         ModuleManager moduleManager;
         String FILE_PATH = Application.StartupPath + "/default.settings";
-        ObservableCollection<Module> statuses; 
 
         public CheckMasterForm()
         {
@@ -67,6 +66,14 @@ namespace CheckMaster
 
                 // Access UI elements
                 MethodInvoker mi = delegate () {
+                    if (moduleManager.failed())
+                    {
+                        this.okButton.Enabled = false;
+                    }
+                    else
+                    {
+                        this.okButton.Enabled = true;
+                    }
                 };
 
                 this.Invoke(mi);
@@ -83,8 +90,33 @@ namespace CheckMaster
 
         private void button1_Click(object sender, EventArgs e)
         {
-            EditModules editModulesForm = new CheckMaster.EditModules();
+            EditModulesForm editModulesForm = new CheckMaster.EditModulesForm();
             editModulesForm.Show();
+        }
+
+        private void computerInfo_Click(object sender, EventArgs e)
+        {
+            ComputerInfoForm computerInfoForm = new ComputerInfoForm();
+            computerInfoForm.Show();
+        }
+
+        private void CheckMasterForm_Load(object sender, EventArgs e)
+        {
+            startUpdateLoop();
+        }
+
+        private void CheckMasterForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            stopUpdateLoop();
+        }
+
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            if (this.moduleManager.failed() == false)
+            {
+                this.moduleManager.runSuccess();
+                this.Close();
+            }
         }
     }
 }

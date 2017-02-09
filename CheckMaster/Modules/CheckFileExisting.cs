@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CheckMaster.Restrictions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace CheckMaster.Modules
         {
             return this.name;
         }
-        
+
         public void init()
         {
             status = Status.NOTRUN;
@@ -59,19 +60,52 @@ namespace CheckMaster.Modules
             return new string[0];
         }
 
-        public override string ToString()
-        {
-            if (this.getName() != "")
-            {
-                return this.getName();
-            }
-
-            return "File Exists";
-        }
-
         public Control[] getEditControls()
         {
             throw new NotImplementedException();
+        }
+
+        #region Restrictions
+        private List<Restriction> restrictions = new List<Restriction>();
+
+        public void addRestriction(Restriction restriction)
+        {
+            this.restrictions.Add(restriction);
+        }
+
+        public void removeRestriction(int index)
+        {
+            this.restrictions.RemoveAt(index);
+        }
+
+        public void initRestrictions()
+        {
+            foreach (Restriction restriction in this.restrictions)
+            {
+                restriction.init();
+            }
+        }
+
+        public bool isRestricted()
+        {
+            foreach (Restriction restriction in this.restrictions)
+            {
+                if (restriction.approved() == false)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public List<Restriction> getRestrictions()
+        {
+            return this.restrictions;
+        }
+        #endregion
+
+        public override string ToString()
+        {
+            return "File Exists";
         }
     }
 }

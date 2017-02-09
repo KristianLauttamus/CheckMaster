@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CheckMaster.Restrictions
 {
-    interface Restriction
+    abstract class Restriction
     {
-        void init();
-        bool approved();
+        public abstract void init();
+        public abstract bool approved();
     }
 }

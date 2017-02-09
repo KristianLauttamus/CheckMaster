@@ -1,6 +1,7 @@
 ﻿using CheckMaster.Restrictions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,15 +9,17 @@ using System.Windows.Forms;
 
 namespace CheckMaster.SuccessModules
 {
-    class EnterMBAM : SuccessModule
+    class ShutDownComputer : SuccessModule
     {
-        private bool readFromCSV;
+        private int seconds;
         private string name;
+        private bool force;
 
-        public EnterMBAM()
+        public ShutDownComputer()
         {
-            this.readFromCSV = false;
+            this.seconds = 0;
             this.name = "";
+            this.force = false;
         }
 
         public Control[] getEditControls()
@@ -32,42 +35,65 @@ namespace CheckMaster.SuccessModules
 
             // ChangeName
             TextBox changeName = new TextBox();
-            changeName.Location = new System.Drawing.Point(50,0);
+            changeName.Location = new System.Drawing.Point(50, 0);
             changeName.Width = 100;
             changeName.Multiline = false;
             changeName.TextChanged += new EventHandler(NameChangedEvent);
             controls.Add(changeName);
 
-            // ReadFromCSV
-            CheckBox readFromCSVCB = new CheckBox();
-            readFromCSVCB.Location = new System.Drawing.Point(0, 25);
-            readFromCSVCB.Width = 250;
-            readFromCSVCB.Checked = readFromCSV;
-            readFromCSVCB.CheckedChanged += new EventHandler(ReadFromCSVChanged);
-            readFromCSVCB.Text = "Read From Excel";
-            controls.Add(readFromCSVCB);
+            // Force Shutdown
+            CheckBox forceShutdown = new CheckBox();
+            forceShutdown.Location = new System.Drawing.Point(0, 25);
+            forceShutdown.Width = 250;
+            forceShutdown.Checked = this.force;
+            forceShutdown.CheckedChanged += new EventHandler(ForceChanged);
+            forceShutdown.Text = "Force Shutdown";
+            controls.Add(forceShutdown);
+
+            //
+            Label secondsLabel = new Label();
+            secondsLabel.Location = new System.Drawing.Point(0, 45);
+            secondsLabel.Width = 300;
+            secondsLabel.Text = "Seconds before shutdown:";
+            controls.Add(secondsLabel);
+
+            // SecondsNumeric
+            NumericUpDown secondsNumeric = new NumericUpDown();
+            secondsNumeric.Location = new System.Drawing.Point(0, 60);
+            secondsNumeric.Width = 250;
+            secondsNumeric.Minimum = 0;
+            secondsNumeric.ValueChanged += new EventHandler(SecondsChanged);
+            controls.Add(secondsNumeric);
 
             return controls.ToArray();
         }
 
-        private void ReadFromCSVChanged(object sender, EventArgs e)
+        private void SecondsChanged(object sender, EventArgs e)
         {
-            this.readFromCSV = ((CheckBox)sender).Checked;
+            this.seconds = (int)((NumericUpDown)sender).Value;
         }
 
-        private void NameChangedEvent(object sender, EventArgs a)
+        private void ForceChanged(object sender, EventArgs e)
+        {
+            this.force = ((CheckBox)sender).Checked;
+        }
+
+        private void NameChangedEvent(object sender, EventArgs e)
         {
             this.name = ((TextBox)sender).Text;
         }
 
-        public string getName()
-        {
-            return this.name;
-        }
-
         public void run()
         {
-            
+            string forceOption = " ";
+            if (this.force)
+            {
+                forceOption = "/f ";
+            }
+            var psi = new ProcessStartInfo("shutdown", "/s "+forceOption+"/t " + this.seconds);
+            psi.CreateNoWindow = true;
+            psi.UseShellExecute = false;
+            Process.Start(psi);
         }
 
         #region Restrictions
@@ -110,7 +136,7 @@ namespace CheckMaster.SuccessModules
 
         public override string ToString()
         {
-            return "Enter MBAM Passwords";
+            return "Shutdown Computer";
         }
     }
 }

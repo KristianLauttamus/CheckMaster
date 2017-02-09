@@ -1,6 +1,6 @@
 ﻿namespace CheckMaster
 {
-    partial class EditModules
+    partial class EditModulesForm
     {
         /// <summary>
         /// Required designer variable.
@@ -38,6 +38,8 @@
             this.removeSuccessModuleButton = new System.Windows.Forms.Button();
             this.successModulesSelection = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.editSuccessModuleRestrictions = new System.Windows.Forms.Button();
+            this.editModuleRestrictions = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // saveButton
@@ -65,7 +67,7 @@
             this.addedModulesList.FormattingEnabled = true;
             this.addedModulesList.Location = new System.Drawing.Point(13, 54);
             this.addedModulesList.Name = "addedModulesList";
-            this.addedModulesList.Size = new System.Drawing.Size(171, 342);
+            this.addedModulesList.Size = new System.Drawing.Size(171, 316);
             this.addedModulesList.TabIndex = 2;
             this.addedModulesList.SelectedIndexChanged += new System.EventHandler(this.addedModulesList_SelectedIndexChanged);
             // 
@@ -81,7 +83,7 @@
             // removeModuleButton
             // 
             this.removeModuleButton.Enabled = false;
-            this.removeModuleButton.Location = new System.Drawing.Point(12, 397);
+            this.removeModuleButton.Location = new System.Drawing.Point(12, 376);
             this.removeModuleButton.Name = "removeModuleButton";
             this.removeModuleButton.Size = new System.Drawing.Size(172, 23);
             this.removeModuleButton.TabIndex = 4;
@@ -90,7 +92,7 @@
             // 
             // editPanel
             // 
-            this.editPanel.Location = new System.Drawing.Point(367, 29);
+            this.editPanel.Location = new System.Drawing.Point(368, 29);
             this.editPanel.Name = "editPanel";
             this.editPanel.Size = new System.Drawing.Size(376, 367);
             this.editPanel.TabIndex = 5;
@@ -100,19 +102,20 @@
             this.addedSuccessModulesList.FormattingEnabled = true;
             this.addedSuccessModulesList.Location = new System.Drawing.Point(190, 54);
             this.addedSuccessModulesList.Name = "addedSuccessModulesList";
-            this.addedSuccessModulesList.Size = new System.Drawing.Size(171, 342);
+            this.addedSuccessModulesList.Size = new System.Drawing.Size(171, 316);
             this.addedSuccessModulesList.TabIndex = 6;
             this.addedSuccessModulesList.SelectedIndexChanged += new System.EventHandler(this.addedSuccessModulesList_SelectedIndexChanged);
             // 
             // removeSuccessModuleButton
             // 
             this.removeSuccessModuleButton.Enabled = false;
-            this.removeSuccessModuleButton.Location = new System.Drawing.Point(190, 397);
+            this.removeSuccessModuleButton.Location = new System.Drawing.Point(190, 376);
             this.removeSuccessModuleButton.Name = "removeSuccessModuleButton";
             this.removeSuccessModuleButton.Size = new System.Drawing.Size(172, 23);
             this.removeSuccessModuleButton.TabIndex = 7;
             this.removeSuccessModuleButton.Text = "Remove";
             this.removeSuccessModuleButton.UseVisualStyleBackColor = true;
+            this.removeSuccessModuleButton.Click += new System.EventHandler(this.removeSuccessModuleButton_Click);
             // 
             // successModulesSelection
             // 
@@ -134,11 +137,33 @@
             this.label1.TabIndex = 9;
             this.label1.Text = "SuccessModules";
             // 
-            // EditModules
+            // editSuccessModuleRestrictions
+            // 
+            this.editSuccessModuleRestrictions.Enabled = false;
+            this.editSuccessModuleRestrictions.Location = new System.Drawing.Point(190, 405);
+            this.editSuccessModuleRestrictions.Name = "editSuccessModuleRestrictions";
+            this.editSuccessModuleRestrictions.Size = new System.Drawing.Size(172, 23);
+            this.editSuccessModuleRestrictions.TabIndex = 10;
+            this.editSuccessModuleRestrictions.Text = "Edit Restrictions...";
+            this.editSuccessModuleRestrictions.UseVisualStyleBackColor = true;
+            // 
+            // editModuleRestrictions
+            // 
+            this.editModuleRestrictions.Enabled = false;
+            this.editModuleRestrictions.Location = new System.Drawing.Point(12, 405);
+            this.editModuleRestrictions.Name = "editModuleRestrictions";
+            this.editModuleRestrictions.Size = new System.Drawing.Size(172, 23);
+            this.editModuleRestrictions.TabIndex = 11;
+            this.editModuleRestrictions.Text = "Edit Restrictions...";
+            this.editModuleRestrictions.UseVisualStyleBackColor = true;
+            // 
+            // EditModulesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(756, 432);
+            this.Controls.Add(this.editModuleRestrictions);
+            this.Controls.Add(this.editSuccessModuleRestrictions);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.successModulesSelection);
             this.Controls.Add(this.removeSuccessModuleButton);
@@ -149,7 +174,10 @@
             this.Controls.Add(this.addedModulesList);
             this.Controls.Add(this.modulesSelection);
             this.Controls.Add(this.saveButton);
-            this.Name = "EditModules";
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "EditModulesForm";
             this.Text = "EditModules";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -168,5 +196,7 @@
         private System.Windows.Forms.Button removeSuccessModuleButton;
         private System.Windows.Forms.ComboBox successModulesSelection;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button editSuccessModuleRestrictions;
+        private System.Windows.Forms.Button editModuleRestrictions;
     }
 }
