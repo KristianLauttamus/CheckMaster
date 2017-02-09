@@ -21,7 +21,7 @@ namespace CheckMaster.Restrictions
 
         public bool approved()
         {
-            
+            return true;
         }
 
         public void init()

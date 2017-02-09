@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace CheckMaster.Modules
 {
@@ -16,6 +17,11 @@ namespace CheckMaster.Modules
             throw new NotImplementedException();
         }
 
+        public Control[] getEditControls()
+        {
+            throw new NotImplementedException();
+        }
+
         public string[] getErrors()
         {
             throw new NotImplementedException();
@@ -23,7 +29,7 @@ namespace CheckMaster.Modules
 
         public string getName()
         {
-            throw new NotImplementedException();
+            return "";
         }
 
         public Status getStatus()
@@ -34,6 +40,16 @@ namespace CheckMaster.Modules
         public void init()
         {
             throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            if (this.getName() != "")
+            {
+                return this.getName();
+            }
+
+            return "Read File Lines";
         }
     }
 }

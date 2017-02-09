@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using CheckMaster.Modules;
 
 namespace CheckMaster
 {
@@ -78,6 +79,12 @@ namespace CheckMaster
         private void stopUpdateLoop()
         {
             t.Abort();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            EditModules editModulesForm = new CheckMaster.EditModules();
+            editModulesForm.Show();
         }
     }
 }

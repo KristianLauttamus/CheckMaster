@@ -51,11 +51,14 @@
             // 
             // modulesSelection
             // 
+            this.modulesSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.modulesSelection.FormattingEnabled = true;
             this.modulesSelection.Location = new System.Drawing.Point(12, 29);
             this.modulesSelection.Name = "modulesSelection";
             this.modulesSelection.Size = new System.Drawing.Size(171, 21);
             this.modulesSelection.TabIndex = 1;
+            this.modulesSelection.TabStop = false;
+            this.modulesSelection.SelectedIndexChanged += new System.EventHandler(this.modulesSelection_SelectedIndexChanged);
             // 
             // addedModulesList
             // 
@@ -64,6 +67,7 @@
             this.addedModulesList.Name = "addedModulesList";
             this.addedModulesList.Size = new System.Drawing.Size(171, 342);
             this.addedModulesList.TabIndex = 2;
+            this.addedModulesList.SelectedIndexChanged += new System.EventHandler(this.addedModulesList_SelectedIndexChanged);
             // 
             // moduleLabel
             // 
@@ -76,6 +80,7 @@
             // 
             // removeModuleButton
             // 
+            this.removeModuleButton.Enabled = false;
             this.removeModuleButton.Location = new System.Drawing.Point(12, 397);
             this.removeModuleButton.Name = "removeModuleButton";
             this.removeModuleButton.Size = new System.Drawing.Size(172, 23);
@@ -97,9 +102,11 @@
             this.addedSuccessModulesList.Name = "addedSuccessModulesList";
             this.addedSuccessModulesList.Size = new System.Drawing.Size(171, 342);
             this.addedSuccessModulesList.TabIndex = 6;
+            this.addedSuccessModulesList.SelectedIndexChanged += new System.EventHandler(this.addedSuccessModulesList_SelectedIndexChanged);
             // 
             // removeSuccessModuleButton
             // 
+            this.removeSuccessModuleButton.Enabled = false;
             this.removeSuccessModuleButton.Location = new System.Drawing.Point(190, 397);
             this.removeSuccessModuleButton.Name = "removeSuccessModuleButton";
             this.removeSuccessModuleButton.Size = new System.Drawing.Size(172, 23);
@@ -109,11 +116,14 @@
             // 
             // successModulesSelection
             // 
+            this.successModulesSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.successModulesSelection.FormattingEnabled = true;
             this.successModulesSelection.Location = new System.Drawing.Point(189, 27);
             this.successModulesSelection.Name = "successModulesSelection";
             this.successModulesSelection.Size = new System.Drawing.Size(171, 21);
             this.successModulesSelection.TabIndex = 8;
+            this.successModulesSelection.TabStop = false;
+            this.successModulesSelection.SelectedIndexChanged += new System.EventHandler(this.successModulesSelection_SelectedIndexChanged);
             // 
             // label1
             // 

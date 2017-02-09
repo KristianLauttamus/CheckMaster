@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CheckMaster.Modules;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace CheckMaster
         public void check()
         {
             this.statuses.Clear();
+
             foreach (Module module in modules)
             {
                 module.check();

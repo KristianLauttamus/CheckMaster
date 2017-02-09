@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,17 +53,30 @@
     <Compile Include="CheckMasterForm.Designer.cs">
       <DependentUpon>CheckMasterForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditModules.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditModules.Designer.cs">
+      <DependentUpon>EditModules.cs</DependentUpon>
+    </Compile>
     <Compile Include="Modules\CheckFileExisting.cs" />
     <Compile Include="Modules\Module.cs" />
     <Compile Include="Modules\ReadFileAndCheckFor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Restrictions\ComputerSystemContains.cs" />
     <Compile Include="Restrictions\Restriction.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="ModuleManager.cs" />
     <Compile Include="Status.cs" />
+    <Compile Include="SuccessModules\EnterMBAM.cs" />
+    <Compile Include="SuccessModules\SuccessModule.cs" />
+    <Compile Include="WMIController.cs" />
     <EmbeddedResource Include="CheckMasterForm.resx">
       <DependentUpon>CheckMasterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditModules.resx">
+      <DependentUpon>EditModules.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

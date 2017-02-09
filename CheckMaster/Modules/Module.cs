@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace CheckMaster.Modules
 {
@@ -13,5 +14,6 @@ namespace CheckMaster.Modules
         void check();
         Status getStatus();
         string[] getErrors();
+        Control[] getEditControls();
     }
 }

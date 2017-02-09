@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace CheckMaster.Modules
 {
@@ -14,6 +15,13 @@ namespace CheckMaster.Modules
         private Status status;
         private String name;
 
+        public CheckFileExisting()
+        {
+            this.FILE_PATH = "";
+            this.status = Status.NOTRUN;
+            this.name = "";
+        }
+
         public string getName()
         {
             return this.name;
@@ -22,7 +30,6 @@ namespace CheckMaster.Modules
         public void init()
         {
             status = Status.NOTRUN;
-            return;
         }
 
         public void check()
@@ -50,6 +57,21 @@ namespace CheckMaster.Modules
             }
 
             return new string[0];
+        }
+
+        public override string ToString()
+        {
+            if (this.getName() != "")
+            {
+                return this.getName();
+            }
+
+            return "File Exists";
+        }
+
+        public Control[] getEditControls()
+        {
+            throw new NotImplementedException();
         }
     }
 }
