@@ -50,7 +50,7 @@ namespace CheckMaster
 
         private void modulesSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (successModulesSelection.SelectedIndex == -1)
+            if (modulesSelection.SelectedIndex == -1)
             {
                 return;
             }
@@ -70,14 +70,25 @@ namespace CheckMaster
 
         private void addedModulesList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (addedSuccessModulesList.SelectedIndex == -1)
+            if (addedModulesList.SelectedIndex == -1)
             {
                 clearEditPanel();
+                this.removeModuleButton.Enabled = false;
                 return;
             }
 
-            Modules.Module sm = (Modules.Module)addedSuccessModulesList.Items[addedSuccessModulesList.SelectedIndex];
-            loadModule(sm);
+            Modules.Module m = (Modules.Module)addedModulesList.Items[addedModulesList.SelectedIndex];
+            loadModule(m);
+            this.removeModuleButton.Enabled = true;
+        }
+
+        private void removeModuleButton_Click(object sender, EventArgs e)
+        {
+            if (addedModulesList.SelectedIndex > -1)
+            {
+                addedModulesList.Items.RemoveAt(addedModulesList.SelectedIndex);
+                addedModulesList.SelectedIndex = -1;
+            }
         }
         #endregion
 

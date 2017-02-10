@@ -12,7 +12,7 @@ using System.Xml.Serialization;
 namespace CheckMaster
 {
     [Serializable]
-    class ModuleManager
+    public class ModuleManager
     {
         private List<Module> modules;
         private List<SuccessModule> successModules;

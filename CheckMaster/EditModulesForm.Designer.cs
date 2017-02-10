@@ -44,7 +44,7 @@
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(669, 397);
+            this.saveButton.Location = new System.Drawing.Point(797, 402);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 0;
@@ -89,12 +89,13 @@
             this.removeModuleButton.TabIndex = 4;
             this.removeModuleButton.Text = "Remove";
             this.removeModuleButton.UseVisualStyleBackColor = true;
+            this.removeModuleButton.Click += new System.EventHandler(this.removeModuleButton_Click);
             // 
             // editPanel
             // 
             this.editPanel.Location = new System.Drawing.Point(368, 29);
             this.editPanel.Name = "editPanel";
-            this.editPanel.Size = new System.Drawing.Size(376, 367);
+            this.editPanel.Size = new System.Drawing.Size(504, 367);
             this.editPanel.TabIndex = 5;
             // 
             // addedSuccessModulesList
@@ -161,7 +162,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(756, 432);
+            this.ClientSize = new System.Drawing.Size(884, 432);
             this.Controls.Add(this.editModuleRestrictions);
             this.Controls.Add(this.editSuccessModuleRestrictions);
             this.Controls.Add(this.label1);

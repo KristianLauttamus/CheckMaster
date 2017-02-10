@@ -62,7 +62,9 @@ namespace CheckMaster.Modules
 
         public Control[] getEditControls()
         {
-            throw new NotImplementedException();
+            List<Control> controls = new List<Control>();
+
+            return controls.ToArray();
         }
 
         #region Restrictions
