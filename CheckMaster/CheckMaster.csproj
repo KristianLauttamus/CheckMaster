@@ -65,6 +65,7 @@
     <Compile Include="EditModulesForm.Designer.cs">
       <DependentUpon>EditModulesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ListBoxItem.cs" />
     <Compile Include="Modules\CheckFileExisting.cs" />
     <Compile Include="Modules\Module.cs" />
     <Compile Include="Modules\ReadFileAndCheckFor.cs" />

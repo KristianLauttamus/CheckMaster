@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,22 +13,31 @@ namespace CheckMaster.Modules
     [Serializable]
     class ReadFileAndCheckFor : Module
     {
-        public String FILE_PATH;
+        private String FILE_PATH;
+
+        private Status status;
+        private List<string> messages;
+        private List<ListBoxItem> items;
 
         private ListBox RowsList;
         private ListBox RowItemsList;
         private TextBox AddRowTextBox;
         private TextBox AddRowItemTextBox;
         private CheckBox RowDisallowCheckBox;
+        private Button RemoveRowButton;
+        private Button RemoveRowItemButton;
+        private Button AddRowItemButton;
 
         public ReadFileAndCheckFor()
         {
             this.FILE_PATH = "";
+            this.status = Status.NOTRUN;
+            this.items = new List<ListBoxItem>();
         }
 
         public void check()
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public Control[] getEditControls()
@@ -60,21 +70,21 @@ namespace CheckMaster.Modules
             #region Rows
             // AddRowLabel
             Label AddRowLabel = new Label();
-            AddRowLabel.Location = new System.Drawing.Point(0, 75);
+            AddRowLabel.Location = new System.Drawing.Point(0, 100);
             AddRowLabel.Width = 200;
             AddRowLabel.Text = "Add Row to check";
             controls.Add(AddRowLabel);
 
             // AddRowTextBox
             AddRowTextBox = new TextBox();
-            AddRowTextBox.Location = new System.Drawing.Point(0, 100);
+            AddRowTextBox.Location = new System.Drawing.Point(0, 130);
             AddRowTextBox.Width = 200;
             AddRowTextBox.Multiline = false;
             controls.Add(AddRowTextBox);
 
             // AddRowButton
             Button AddRowButton = new Button();
-            AddRowButton.Location = new System.Drawing.Point(200, 100);
+            AddRowButton.Location = new System.Drawing.Point(200, 130);
             AddRowButton.Width = 50;
             AddRowButton.Text = "Add Row";
             AddRowButton.Click += new EventHandler(AddRowButton_Clicked);
@@ -83,10 +93,19 @@ namespace CheckMaster.Modules
             // ListBox
             RowsList = new ListBox();
             RowsList.Width = 200;
-            RowsList.Location = new System.Drawing.Point(0,125);
-            RowsList.MeasureItem += new MeasureItemEventHandler(RowsList_MeasureItem);
-            RowsList.DrawItem += new DrawItemEventHandler(RowsList_DrawItem);
+            RowsList.Height = 100;
+            RowsList.Location = new System.Drawing.Point(0,160);
+            RowsList.SelectedIndexChanged += new EventHandler(RowsList_SelectedIndexChanged);
             controls.Add(RowsList);
+
+            // RemoveRowButton
+            RemoveRowButton = new Button();
+            RemoveRowButton.Width = 200;
+            RemoveRowButton.Text = "Remove selected";
+            RemoveRowButton.Location = new System.Drawing.Point(0,260);
+            RemoveRowButton.Click += new EventHandler(RemoveRowButton_Click);
+            RemoveRowButton.Enabled = false;
+            controls.Add(RemoveRowButton);
             #endregion
 
             #region Row Actions
@@ -111,35 +130,109 @@ namespace CheckMaster.Modules
             AddRowItemTextBox.Location = new System.Drawing.Point(250, 130);
             AddRowItemTextBox.Width = 200;
             AddRowItemTextBox.Multiline = false;
+            AddRowItemTextBox.Enabled = false;
             controls.Add(AddRowItemTextBox);
 
             // AddRowItemButton
-            Button AddRowItemButton = new Button();
+            AddRowItemButton = new Button();
             AddRowItemButton.Location = new System.Drawing.Point(450, 130);
             AddRowItemButton.Width = 50;
             AddRowItemButton.Text = "Add Item";
+            AddRowItemButton.Enabled = false;
             AddRowItemButton.Click += new EventHandler(AddRowItemButton_Clicked);
             controls.Add(AddRowItemButton);
             
             // RowItemsList
             RowItemsList = new ListBox();
             RowItemsList.Width = 200;
+            RowItemsList.Height = 100;
             RowItemsList.Location = new System.Drawing.Point(250, 160);
+            RowItemsList.SelectedIndexChanged += new EventHandler(RowItemsList_SelectedIndexChanged);
             controls.Add(RowItemsList);
+
+            // RemoveRowItemButton
+            RemoveRowItemButton = new Button();
+            RemoveRowItemButton.Width = 200;
+            RemoveRowItemButton.Text = "Remove selected";
+            RemoveRowItemButton.Location = new System.Drawing.Point(250, 260);
+            RemoveRowItemButton.Click += new EventHandler(RemoveRowItemButton_Click);
+            RemoveRowItemButton.Enabled = false;
+            controls.Add(RemoveRowItemButton);
             #endregion
 
             return controls.ToArray();
         }
 
+        private void RowItemsList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(((ListBox)sender).SelectedIndex >= 0)
+            {
+                this.RemoveRowItemButton.Enabled = true;
+            }
+            else
+            {
+                this.RemoveRowItemButton.Enabled = false;
+            }
+        }
+
         #region Events
+        private void RemoveRowItemButton_Click(object sender, EventArgs e)
+        {
+            if (this.RowItemsList.SelectedIndex >= 0)
+            {
+                ((ListBoxItem)this.RowsList.Items[this.RowsList.SelectedIndex]).items.RemoveAt(this.RowItemsList.SelectedIndex);
+                this.RowItemsList.Items.RemoveAt(this.RowItemsList.SelectedIndex);
+
+                // Remove from array
+                items[this.RowsList.SelectedIndex].items.RemoveAt(this.RowItemsList.SelectedIndex);
+            }
+        }
+
+        private void RemoveRowButton_Click(object sender, EventArgs e)
+        {
+            if (this.RowsList.SelectedIndex >= 0)
+            {
+                this.RowsList.Items.RemoveAt(this.RowsList.SelectedIndex);
+            }
+        }
+
+        private void RowsList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (((ListBox)sender).SelectedIndex >= 0)
+            {
+                RowItemsList.Items.Clear();
+                RowDisallowCheckBox.Enabled = true;
+                ListBox list = (ListBox)sender;
+                ListBoxItem item = (ListBoxItem)list.Items[list.SelectedIndex];
+                RowDisallowCheckBox.Checked = item.disallowed;
+                RowItemsList.Enabled = true;
+                AddRowItemButton.Enabled = true;
+                AddRowItemTextBox.Enabled = true;
+                RowItemsList.Items.AddRange(item.items.ToArray());
+                RemoveRowButton.Enabled = true;
+            }
+            else
+            {
+                RowDisallowCheckBox.Enabled = false;
+                RowDisallowCheckBox.Checked = false;
+                RemoveRowButton.Enabled = false;
+                RowItemsList.Enabled = false;
+                AddRowItemButton.Enabled = false;
+                AddRowItemTextBox.Enabled = false;
+                RemoveRowItemButton.Enabled = false;
+                RowItemsList.Items.Clear();
+            }
+        }
+
         private void RowDisallow_Changed(object sender, EventArgs e)
         {
-            if(RowsList.SelectedIndex == -1)
+            if(RowsList.SelectedIndex <= -1)
             {
                 return;
             }
 
-            ((ListBoxItem)RowsList.Items[RowsList.SelectedIndex]).setDisallowed(((CheckBox)sender).Checked);
+            ListBoxItem item = (ListBoxItem)RowsList.Items[RowsList.SelectedIndex];
+            item.disallowed = ((CheckBox)sender).Checked;
         }
 
         private void AddRowButton_Clicked(object sender, EventArgs e)
@@ -160,29 +253,9 @@ namespace CheckMaster.Modules
                 return;
             }
 
-            ((ListBoxItem)RowsList.Items[RowsList.SelectedIndex]).items.Add(AddRowTextBox.Text);
+            ((ListBoxItem)RowsList.Items[RowsList.SelectedIndex]).items.Add(AddRowItemTextBox.Text);
+            RowItemsList.Items.Add(AddRowItemTextBox.Text);
             AddRowTextBox.Text = "";
-        }
-
-        private void RowsList_MeasureItem(object sender, MeasureItemEventArgs e)
-        {
-            if (e.Index < 0)
-            {
-                return;
-            }
-
-            e.ItemHeight = 20;
-
-            foreach(string item in ((ListBoxItem)RowsList.Items[e.Index]).items)
-            {
-                e.ItemHeight += 25;
-            }
-        }
-
-        private void RowsList_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            e.DrawBackground();
-            e.Graphics.DrawString(((ListBox)sender).Items[e.Index].ToString(), e.Font, new SolidBrush(e.ForeColor), e.Bounds);
         }
 
         private void FilePathChanged(object sender, EventArgs e)
@@ -208,7 +281,23 @@ namespace CheckMaster.Modules
 
         public void init()
         {
-            throw new NotImplementedException();
+            if (File.Exists(this.FILE_PATH))
+            {
+                FileStream fs = File.OpenRead(this.FILE_PATH);
+
+                using (StreamReader sr = new StreamReader(fs))
+                {
+                    while (sr.Peek() >= 0)
+                    {
+                        string line = sr.ReadLine();
+                    }
+                }
+            }
+            else
+            {
+                this.messages.Add("File (" + this.FILE_PATH + ") not found");
+                this.status = Status.FAIL;
+            }
         }
 
         #region Restrictions
@@ -252,31 +341,6 @@ namespace CheckMaster.Modules
         public override string ToString()
         {
             return "Read file and check lines";
-        }
-
-        [Serializable]
-        public struct ListBoxItem
-        {
-            public string row;
-            public bool disallowed;
-            public List<string> items;
-
-            public override string ToString()
-            {
-                String toString = row + "\n";
-
-                foreach(string item in items)
-                {
-                    toString += " - " + item + "\n";
-                }
-
-                return toString;
-            }
-
-            internal void setDisallowed(bool disallowed)
-            {
-                this.disallowed = disallowed;
-            }
         }
     }
 }
