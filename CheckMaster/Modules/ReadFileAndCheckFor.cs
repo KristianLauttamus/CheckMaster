@@ -16,8 +16,8 @@ namespace CheckMaster.Modules
         private String FILE_PATH;
 
         private Status status;
-        private List<string> messages;
-        private List<ListBoxItem> items;
+        private List<string> errors;
+        private bool runOnCheck;
 
         private ListBox RowsList;
         private ListBox RowItemsList;
@@ -32,12 +32,16 @@ namespace CheckMaster.Modules
         {
             this.FILE_PATH = "";
             this.status = Status.NOTRUN;
-            this.items = new List<ListBoxItem>();
+            this.errors = new List<string>();
+            this.runOnCheck = false;
         }
 
         public void check()
         {
-            return;
+            if (runOnCheck)
+            {
+                this.checkFile();
+            }
         }
 
         public Control[] getEditControls()
@@ -160,12 +164,27 @@ namespace CheckMaster.Modules
             controls.Add(RemoveRowItemButton);
             #endregion
 
+            // Run on update
+            CheckBox RunOnUpdate = new CheckBox();
+            RunOnUpdate.Location = new System.Drawing.Point(0,300);
+            RunOnUpdate.Text = "Run continuously";
+            RunOnUpdate.CheckedChanged += new EventHandler(RunOnUpdate_CheckedChanged);
+            RunOnUpdate.Width = 200;
+            RunOnUpdate.Checked = false;
+            controls.Add(RunOnUpdate);
+
             return controls.ToArray();
+        }
+
+        #region Events
+        private void RunOnUpdate_CheckedChanged(object sender, EventArgs e)
+        {
+            this.runOnCheck = ((CheckBox)sender).Checked;
         }
 
         private void RowItemsList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(((ListBox)sender).SelectedIndex >= 0)
+            if (((ListBox)sender).SelectedIndex >= 0)
             {
                 this.RemoveRowItemButton.Enabled = true;
             }
@@ -175,16 +194,12 @@ namespace CheckMaster.Modules
             }
         }
 
-        #region Events
         private void RemoveRowItemButton_Click(object sender, EventArgs e)
         {
             if (this.RowItemsList.SelectedIndex >= 0)
             {
                 ((ListBoxItem)this.RowsList.Items[this.RowsList.SelectedIndex]).items.RemoveAt(this.RowItemsList.SelectedIndex);
                 this.RowItemsList.Items.RemoveAt(this.RowItemsList.SelectedIndex);
-
-                // Remove from array
-                items[this.RowsList.SelectedIndex].items.RemoveAt(this.RowItemsList.SelectedIndex);
             }
         }
 
@@ -266,7 +281,7 @@ namespace CheckMaster.Modules
 
         public string[] getErrors()
         {
-            throw new NotImplementedException();
+            return this.errors.ToArray();
         }
 
         public string getName()
@@ -276,26 +291,71 @@ namespace CheckMaster.Modules
 
         public Status getStatus()
         {
-            throw new NotImplementedException();
+            return this.status;
         }
 
         public void init()
         {
+            this.checkFile();
+        }
+
+        public void checkFile()
+        {
+            this.errors.Clear();
+            this.status = Status.NOTRUN;
             if (File.Exists(this.FILE_PATH))
             {
                 FileStream fs = File.OpenRead(this.FILE_PATH);
+                Dictionary<ListBoxItem, bool> found = new Dictionary<ListBoxItem, bool>();
 
                 using (StreamReader sr = new StreamReader(fs))
                 {
                     while (sr.Peek() >= 0)
                     {
                         string line = sr.ReadLine();
+
+                        foreach (ListBoxItem item in this.RowsList.Items)
+                        {
+                            if (line.Contains(item.row))
+                            {
+                                bool founded = false;
+
+                                foreach (string rowItem in item.items)
+                                {
+                                    if (line.Contains(rowItem))
+                                    {
+                                        founded = true;
+                                    }
+                                }
+
+                                found.Add(item, founded);
+                            }
+                        }
                     }
+                }
+
+                foreach (ListBoxItem item in found.Keys)
+                {
+                    if (item.disallowed && found[item])
+                    {
+                        this.status = Status.FAIL;
+                        this.errors.Add("Row (" + item.row + ") failed, items found");
+                    }
+                    if (item.disallowed == false && found[item] == false)
+                    {
+                        this.status = Status.FAIL;
+                        this.errors.Add("Row (" + item.row + ") failed, items not found");
+                    }
+                }
+
+                if (status == Status.NOTRUN)
+                {
+                    status = Status.OK;
                 }
             }
             else
             {
-                this.messages.Add("File (" + this.FILE_PATH + ") not found");
+                this.errors.Add("File (" + this.FILE_PATH + ") not found");
                 this.status = Status.FAIL;
             }
         }

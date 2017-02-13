@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace CheckMaster.Restrictions
 {
-    abstract class Restriction
+    interface Restriction
     {
-        public abstract void init();
-        public abstract bool approved();
+        void init();
+        bool approved();
+        Control[] getEditControls();
     }
 }

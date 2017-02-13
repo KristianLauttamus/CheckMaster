@@ -74,12 +74,14 @@ namespace CheckMaster
             {
                 clearEditPanel();
                 this.removeModuleButton.Enabled = false;
+                this.editModuleRestrictions.Enabled = false;
                 return;
             }
 
             Modules.Module m = (Modules.Module)addedModulesList.Items[addedModulesList.SelectedIndex];
             loadModule(m);
             this.removeModuleButton.Enabled = true;
+            this.editModuleRestrictions.Enabled = true;
         }
 
         private void removeModuleButton_Click(object sender, EventArgs e)
@@ -133,12 +135,14 @@ namespace CheckMaster
             {
                 clearEditPanel();
                 this.removeSuccessModuleButton.Enabled = false;
+                this.editSuccessModuleRestrictions.Enabled = false;
                 return;
             }
 
             SuccessModule sm = (SuccessModule)addedSuccessModulesList.Items[addedSuccessModulesList.SelectedIndex];
             loadSuccessModule(sm);
             this.removeSuccessModuleButton.Enabled = true;
+            this.editSuccessModuleRestrictions.Enabled = true;
         }
 
         private void removeSuccessModuleButton_Click(object sender, EventArgs e)
