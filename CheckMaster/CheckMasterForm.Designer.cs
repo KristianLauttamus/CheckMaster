@@ -28,32 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.editButton = new System.Windows.Forms.Button();
+            this.loadSettingsButton = new System.Windows.Forms.Button();
             this.howManyRanLabel = new System.Windows.Forms.Label();
             this.statusList = new System.Windows.Forms.ListBox();
             this.computerInfo = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // button1
+            // editButton
             // 
-            this.button1.Location = new System.Drawing.Point(13, 257);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(43, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Edit";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.editButton.Location = new System.Drawing.Point(13, 257);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(43, 23);
+            this.editButton.TabIndex = 0;
+            this.editButton.Text = "Edit";
+            this.editButton.UseVisualStyleBackColor = true;
+            this.editButton.Click += new System.EventHandler(this.editButton_Click);
             // 
-            // button2
+            // loadSettingsButton
             // 
-            this.button2.Location = new System.Drawing.Point(62, 257);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(92, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Load Settings";
-            this.button2.UseVisualStyleBackColor = true;
+            this.loadSettingsButton.Location = new System.Drawing.Point(62, 257);
+            this.loadSettingsButton.Name = "loadSettingsButton";
+            this.loadSettingsButton.Size = new System.Drawing.Size(92, 23);
+            this.loadSettingsButton.TabIndex = 1;
+            this.loadSettingsButton.Text = "Load Settings";
+            this.loadSettingsButton.UseVisualStyleBackColor = true;
+            this.loadSettingsButton.Click += new System.EventHandler(this.loadSettingsButton_Click);
             // 
             // howManyRanLabel
             // 
@@ -106,8 +107,8 @@
             this.Controls.Add(this.computerInfo);
             this.Controls.Add(this.statusList);
             this.Controls.Add(this.howManyRanLabel);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.loadSettingsButton);
+            this.Controls.Add(this.editButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -123,8 +124,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button editButton;
+        private System.Windows.Forms.Button loadSettingsButton;
         private System.Windows.Forms.Label howManyRanLabel;
         private System.Windows.Forms.ListBox statusList;
         private System.Windows.Forms.Button computerInfo;

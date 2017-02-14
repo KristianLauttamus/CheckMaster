@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace CheckMaster.Restrictions
 {
-    interface Restriction
+    public interface Restriction
     {
         void init();
         bool approved();

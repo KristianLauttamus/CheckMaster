@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace CheckMaster.Modules
 {
-    interface Module
+    public interface Module
     {
         void init();
         void check();

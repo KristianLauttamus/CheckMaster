@@ -36,6 +36,7 @@ namespace CheckMaster
             }
             catch (Exception ex)
             {
+                Console.WriteLine("ASD");
                 Console.WriteLine(ex.Message);
             }
         }

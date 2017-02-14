@@ -180,6 +180,7 @@
             this.MinimizeBox = false;
             this.Name = "EditModulesForm";
             this.Text = "EditModules";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditModulesForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

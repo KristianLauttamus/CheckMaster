@@ -14,8 +14,8 @@ namespace CheckMaster
     [Serializable]
     public class ModuleManager
     {
-        private List<Module> modules;
-        private List<SuccessModule> successModules;
+        public List<Module> modules;
+        public List<SuccessModule> successModules;
         private Dictionary<Module, Status> statuses;
 
         public ModuleManager()

@@ -19,22 +19,13 @@ namespace CheckMaster
         Thread t;
         Serializer serializer;
         ModuleManager moduleManager;
-        String FILE_PATH = Application.StartupPath + "/default.settings";
 
         public CheckMasterForm()
         {
             serializer = new CheckMaster.Serializer();
 
             // Check if default settings file exists
-            if (File.Exists(FILE_PATH))
-            {
-                moduleManager = serializer.DeSerializeObject<ModuleManager>(FILE_PATH);
-            }
-            else // If not, then create one and initialize it
-            {
-                moduleManager = new ModuleManager();
-                serializer.SerializeObject<ModuleManager>(moduleManager, FILE_PATH);
-            }
+            loadModuleManagerFromFile();
 
             // Initialize Modules
             moduleManager.init();
@@ -50,7 +41,8 @@ namespace CheckMaster
         /// </summary>
         private void startUpdateLoop()
         {
-            t.Start();
+            if(t.IsAlive == false)
+                t.Start();
         }
 
         /// <summary>
@@ -88,10 +80,20 @@ namespace CheckMaster
             t.Abort();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void editButton_Click(object sender, EventArgs e)
         {
             EditModulesForm editModulesForm = new CheckMaster.EditModulesForm();
+            editModulesForm.FormClosing += new FormClosingEventHandler(editModulesForm_FormClosing);
             editModulesForm.Show();
+        }
+
+        private void editModulesForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            moduleManager.modules.Clear();
+            moduleManager.modules.AddRange(((EditModulesForm)sender).GetModules());
+
+            moduleManager.successModules.Clear();
+            moduleManager.successModules.AddRange(((EditModulesForm)sender).GetSuccessModules());
         }
 
         private void computerInfo_Click(object sender, EventArgs e)
@@ -117,6 +119,48 @@ namespace CheckMaster
                 this.moduleManager.runSuccess();
                 this.Close();
             }
+        }
+
+        private void loadModuleManagerFromFile()
+        {
+            // Reset to default if not found or empty
+            if (
+                Properties.Settings.Default["modulemanager"].ToString() == "" ||
+                File.Exists(Properties.Settings.Default["modulemanager"].ToString()) == false
+                )
+            {
+                Properties.Settings.Default["modulemanager"] = Application.StartupPath + "/defaultmodules.xml";
+            }
+
+            // Check if found
+            if (File.Exists(Properties.Settings.Default["modulemanager"].ToString()))
+            {
+                Console.WriteLine("Init ModuleManager");
+                moduleManager = serializer.DeSerializeObject<ModuleManager>(Properties.Settings.Default["modulemanager"].ToString());
+            }
+            else // If not, then create one and initialize it
+            {
+                Console.WriteLine("Create ModuleManager");
+                moduleManager = new ModuleManager();
+                serializer.SerializeObject<ModuleManager>(moduleManager, Properties.Settings.Default["modulemanager"].ToString());
+            }
+        }
+
+        private void loadSettingsButton_Click(object sender, EventArgs e)
+        {
+            stopUpdateLoop();
+            OpenFileDialog openXMLFileDialog = new OpenFileDialog();
+
+            openXMLFileDialog.InitialDirectory = "c:\\";
+            openXMLFileDialog.Filter = "XML Files (*.xml)|*.xml";
+            openXMLFileDialog.FilterIndex = 0;
+            openXMLFileDialog.RestoreDirectory = true;
+
+            if (openXMLFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Console.WriteLine(openXMLFileDialog.FileName);
+            }
+            startUpdateLoop();
         }
     }
 }

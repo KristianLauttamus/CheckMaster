@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace CheckMaster.SuccessModules
 {
-    interface SuccessModule
+    public interface SuccessModule
     {
         Control[] getEditControls();
         void run();

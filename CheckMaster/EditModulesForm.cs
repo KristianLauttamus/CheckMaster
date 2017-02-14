@@ -33,6 +33,16 @@ namespace CheckMaster
             loadSuccessModules();
         }
 
+        public Modules.Module[] GetModules()
+        {
+            return this.modules.ToArray();
+        }
+
+        public SuccessModule[] GetSuccessModules()
+        {
+            return this.successModules.ToArray();
+        }
+
         #region Modules
         private void loadModules()
         {
@@ -158,6 +168,17 @@ namespace CheckMaster
         private void clearEditPanel()
         {
             this.editPanel.Controls.Clear();
+        }
+
+        private void EditModulesForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to exit editing without saving?",
+                       "Humans make mistakes",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Information) == DialogResult.No)
+            {
+                e.Cancel = true;
+            }
         }
     }
 }
