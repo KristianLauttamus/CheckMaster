@@ -31,13 +31,17 @@
             this.closeButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.moduleLabel = new System.Windows.Forms.Label();
+            this.editPanel = new System.Windows.Forms.Panel();
+            this.removeButton = new System.Windows.Forms.Button();
+            this.restrictionsListBox = new System.Windows.Forms.ListBox();
+            this.restrictionsComboBox = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // closeButton
             // 
             this.closeButton.Location = new System.Drawing.Point(13, 282);
             this.closeButton.Name = "closeButton";
-            this.closeButton.Size = new System.Drawing.Size(605, 23);
+            this.closeButton.Size = new System.Drawing.Size(443, 23);
             this.closeButton.TabIndex = 0;
             this.closeButton.Text = "Close";
             this.closeButton.UseVisualStyleBackColor = true;
@@ -62,11 +66,48 @@
             this.moduleLabel.TabIndex = 2;
             this.moduleLabel.Text = "label2";
             // 
+            // editPanel
+            // 
+            this.editPanel.Location = new System.Drawing.Point(211, 29);
+            this.editPanel.Name = "editPanel";
+            this.editPanel.Size = new System.Drawing.Size(245, 247);
+            this.editPanel.TabIndex = 3;
+            // 
+            // removeButton
+            // 
+            this.removeButton.Location = new System.Drawing.Point(12, 253);
+            this.removeButton.Name = "removeButton";
+            this.removeButton.Size = new System.Drawing.Size(193, 23);
+            this.removeButton.TabIndex = 4;
+            this.removeButton.Text = "Remove Selected";
+            this.removeButton.UseVisualStyleBackColor = true;
+            // 
+            // restrictionsListBox
+            // 
+            this.restrictionsListBox.FormattingEnabled = true;
+            this.restrictionsListBox.Location = new System.Drawing.Point(12, 60);
+            this.restrictionsListBox.Name = "restrictionsListBox";
+            this.restrictionsListBox.Size = new System.Drawing.Size(193, 186);
+            this.restrictionsListBox.TabIndex = 5;
+            // 
+            // restrictionsComboBox
+            // 
+            this.restrictionsComboBox.FormattingEnabled = true;
+            this.restrictionsComboBox.Location = new System.Drawing.Point(12, 33);
+            this.restrictionsComboBox.Name = "restrictionsComboBox";
+            this.restrictionsComboBox.Size = new System.Drawing.Size(193, 21);
+            this.restrictionsComboBox.TabIndex = 6;
+            this.restrictionsComboBox.SelectedIndexChanged += new System.EventHandler(this.restrictionsComboBox_SelectedIndexChanged);
+            // 
             // RestrictionEditingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(630, 317);
+            this.ClientSize = new System.Drawing.Size(468, 317);
+            this.Controls.Add(this.restrictionsComboBox);
+            this.Controls.Add(this.restrictionsListBox);
+            this.Controls.Add(this.removeButton);
+            this.Controls.Add(this.editPanel);
             this.Controls.Add(this.moduleLabel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.closeButton);
@@ -82,5 +123,9 @@
         private System.Windows.Forms.Button closeButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label moduleLabel;
+        private System.Windows.Forms.Panel editPanel;
+        private System.Windows.Forms.Button removeButton;
+        private System.Windows.Forms.ListBox restrictionsListBox;
+        private System.Windows.Forms.ComboBox restrictionsComboBox;
     }
 }

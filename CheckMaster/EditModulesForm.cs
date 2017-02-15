@@ -19,11 +19,14 @@ namespace CheckMaster
         List<Modules.Module> modules;
         List<SuccessModule> successModules;
 
+        public bool saving;
+
         public EditModulesForm()
         {
             modules = new List<Modules.Module>();
             successModules = new List<SuccessModule>();
-            
+            saving = false;
+
             InitializeComponent();
 
             // Get all Modules
@@ -172,13 +175,28 @@ namespace CheckMaster
 
         private void EditModulesForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to exit editing without saving?",
+            if (!saving && MessageBox.Show("Are you sure you want to exit editing without saving?",
                        "Humans make mistakes",
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Information) == DialogResult.No)
             {
                 e.Cancel = true;
             }
+        }
+
+        private void editSuccessModuleRestrictions_Click(object sender, EventArgs e)
+        {
+            if (this.addedSuccessModulesList.SelectedIndex >= 0)
+            {
+                SuccessModule sm = (SuccessModule)addedSuccessModulesList.Items[addedSuccessModulesList.SelectedIndex];
+                RestrictionEditingForm restrictionEditingForm = new RestrictionEditingForm(sm);
+                restrictionEditingForm.Show();
+            }
+        }
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            saving = true;
         }
     }
 }

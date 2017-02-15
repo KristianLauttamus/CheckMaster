@@ -22,6 +22,7 @@ namespace CheckMaster
 
         public CheckMasterForm()
         {
+            moduleManager = new ModuleManager();
             serializer = new CheckMaster.Serializer();
 
             // Check if default settings file exists
@@ -89,11 +90,15 @@ namespace CheckMaster
 
         private void editModulesForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            moduleManager.modules.Clear();
-            moduleManager.modules.AddRange(((EditModulesForm)sender).GetModules());
+            if (((EditModulesForm)sender).saving) {
+                moduleManager.modules.Clear();
+                moduleManager.modules.AddRange(((EditModulesForm)sender).GetModules());
 
-            moduleManager.successModules.Clear();
-            moduleManager.successModules.AddRange(((EditModulesForm)sender).GetSuccessModules());
+                moduleManager.successModules.Clear();
+                moduleManager.successModules.AddRange(((EditModulesForm)sender).GetSuccessModules());
+
+                serializer.SerializeObject<ModuleManager>(moduleManager, Properties.Settings.Default["modulemanager"].ToString());
+            }
         }
 
         private void computerInfo_Click(object sender, EventArgs e)

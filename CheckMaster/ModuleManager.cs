@@ -14,15 +14,15 @@ namespace CheckMaster
     [Serializable]
     public class ModuleManager
     {
+        [XmlArray]
         public List<Module> modules;
+        [XmlArray]
         public List<SuccessModule> successModules;
-        private Dictionary<Module, Status> statuses;
 
         public ModuleManager()
         {
             this.modules = new List<Module>();
             this.successModules = new List<SuccessModule>();
-            this.statuses = new Dictionary<Module, Status>();
         }
 
         public void init()
@@ -35,24 +35,23 @@ namespace CheckMaster
 
         public void check()
         {
-            this.statuses.Clear();
-
             foreach (Module module in modules)
             {
                 module.check();
-
-                this.statuses.Add(module, module.getStatus());
             }
         }
 
         public bool failed()
         {
-            if (this.statuses.Count == 0)
+            foreach (Module module in modules)
             {
-                return false;
+                if (module.getStatus() == Status.ERROR || module.getStatus() == Status.FAIL)
+                {
+                    return true;
+                }
             }
 
-            return this.statuses.ContainsValue(Status.ERROR) || this.statuses.ContainsValue(Status.FAIL);
+            return false;
         }
 
         public void runSuccess()

@@ -50,6 +50,7 @@
             this.saveButton.TabIndex = 0;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
             // modulesSelection
             // 
@@ -147,6 +148,7 @@
             this.editSuccessModuleRestrictions.TabIndex = 10;
             this.editSuccessModuleRestrictions.Text = "Edit Restrictions...";
             this.editSuccessModuleRestrictions.UseVisualStyleBackColor = true;
+            this.editSuccessModuleRestrictions.Click += new System.EventHandler(this.editSuccessModuleRestrictions_Click);
             // 
             // editModuleRestrictions
             // 
