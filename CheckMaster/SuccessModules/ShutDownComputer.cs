@@ -31,7 +31,7 @@ namespace CheckMaster.SuccessModules
             changeNameLabel.Location = new System.Drawing.Point(0, 0);
             changeNameLabel.Width = 50;
             changeNameLabel.Text = "Name:";
-            controls.Add(changeNameLabel);
+            //controls.Add(changeNameLabel);
 
             // ChangeName
             TextBox changeName = new TextBox();
@@ -39,7 +39,7 @@ namespace CheckMaster.SuccessModules
             changeName.Width = 100;
             changeName.Multiline = false;
             changeName.TextChanged += new EventHandler(NameChangedEvent);
-            controls.Add(changeName);
+            //controls.Add(changeName);
 
             // Force Shutdown
             CheckBox forceShutdown = new CheckBox();
@@ -52,14 +52,14 @@ namespace CheckMaster.SuccessModules
 
             //
             Label secondsLabel = new Label();
-            secondsLabel.Location = new System.Drawing.Point(0, 45);
+            secondsLabel.Location = new System.Drawing.Point(0, 75);
             secondsLabel.Width = 300;
             secondsLabel.Text = "Seconds before shutdown:";
             controls.Add(secondsLabel);
 
             // SecondsNumeric
             NumericUpDown secondsNumeric = new NumericUpDown();
-            secondsNumeric.Location = new System.Drawing.Point(0, 60);
+            secondsNumeric.Location = new System.Drawing.Point(0, 100);
             secondsNumeric.Width = 250;
             secondsNumeric.Minimum = 0;
             secondsNumeric.ValueChanged += new EventHandler(SecondsChanged);

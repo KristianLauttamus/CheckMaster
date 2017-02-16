@@ -1,4 +1,5 @@
 ﻿using CheckMaster.Modules;
+using CheckMaster.Restrictions;
 using CheckMaster.SuccessModules;
 using System;
 using System.Collections.Generic;
@@ -16,16 +17,16 @@ namespace CheckMaster
 {
     public partial class EditModulesForm : Form
     {
-        List<Modules.Module> modules;
-        List<SuccessModule> successModules;
+        Dictionary<Modules.Module, List<Restriction>> modules;
+        Dictionary<SuccessModule, List<Restriction>> successModules;
 
-        public bool saving;
+        public bool changed;
 
         public EditModulesForm()
         {
-            modules = new List<Modules.Module>();
-            successModules = new List<SuccessModule>();
-            saving = false;
+            modules = new Dictionary<Modules.Module, List<Restriction>>();
+            successModules = new Dictionary<SuccessModule, List<Restriction>>();
+            changed = false;
 
             InitializeComponent();
 
@@ -36,14 +37,14 @@ namespace CheckMaster
             loadSuccessModules();
         }
 
-        public Modules.Module[] GetModules()
+        public Dictionary<Modules.Module, List<Restriction>> GetModules()
         {
-            return this.modules.ToArray();
+            return this.modules;
         }
 
-        public SuccessModule[] GetSuccessModules()
+        public Dictionary<SuccessModule, List<Restriction>> GetSuccessModules()
         {
-            return this.successModules.ToArray();
+            return this.successModules;
         }
 
         #region Modules
@@ -74,6 +75,7 @@ namespace CheckMaster
 
             addedModulesList.SelectedIndex = addedModulesList.Items.Count - 1;
             modulesSelection.SelectedIndex = -1;
+            this.changed = true;
         }
         private void loadModule(Modules.Module m)
         {
@@ -91,10 +93,13 @@ namespace CheckMaster
                 return;
             }
 
+            this.addedSuccessModulesList.SelectedIndex = -1;
+
             Modules.Module m = (Modules.Module)addedModulesList.Items[addedModulesList.SelectedIndex];
             loadModule(m);
             this.removeModuleButton.Enabled = true;
             this.editModuleRestrictions.Enabled = true;
+            this.changed = true;
         }
 
         private void removeModuleButton_Click(object sender, EventArgs e)
@@ -103,6 +108,7 @@ namespace CheckMaster
             {
                 addedModulesList.Items.RemoveAt(addedModulesList.SelectedIndex);
                 addedModulesList.SelectedIndex = -1;
+                this.changed = true;
             }
         }
         #endregion
@@ -118,8 +124,7 @@ namespace CheckMaster
             q.ToList().ForEach(sm => {
                 SuccessModule instance = (SuccessModule)Activator.CreateInstance(sm);
                 this.successModulesSelection.Items.Add(instance);
-                }
-            );
+            });
         }
 
         private void successModulesSelection_SelectedIndexChanged(object sender, EventArgs e)
@@ -135,6 +140,7 @@ namespace CheckMaster
 
             addedSuccessModulesList.SelectedIndex = addedSuccessModulesList.Items.Count - 1;
             successModulesSelection.SelectedIndex = -1;
+            this.changed = true;
         }
         private void loadSuccessModule(SuccessModule sm)
         {
@@ -152,10 +158,13 @@ namespace CheckMaster
                 return;
             }
 
+            this.addedModulesList.SelectedIndex = -1;
+
             SuccessModule sm = (SuccessModule)addedSuccessModulesList.Items[addedSuccessModulesList.SelectedIndex];
             loadSuccessModule(sm);
             this.removeSuccessModuleButton.Enabled = true;
             this.editSuccessModuleRestrictions.Enabled = true;
+            this.changed = true;
         }
 
         private void removeSuccessModuleButton_Click(object sender, EventArgs e)
@@ -164,6 +173,7 @@ namespace CheckMaster
             {
                 addedSuccessModulesList.Items.RemoveAt(addedSuccessModulesList.SelectedIndex);
                 addedSuccessModulesList.SelectedIndex = -1;
+                this.changed = true;
             }
         }
         #endregion
@@ -175,7 +185,7 @@ namespace CheckMaster
 
         private void EditModulesForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!saving && MessageBox.Show("Are you sure you want to exit editing without saving?",
+            if (this.changed && MessageBox.Show("Are you sure you want to exit editing without saving?",
                        "Humans make mistakes",
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Information) == DialogResult.No)
@@ -196,7 +206,44 @@ namespace CheckMaster
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            saving = true;
+            this.save();
+
+            this.changed = false;
+            this.Close();
+        }
+
+        private void saveAsButton_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Modules File|*.modules";
+            saveFileDialog.Title = "Save an Image File";
+            saveFileDialog.ShowDialog();
+
+            if (saveFileDialog.FileName != "")
+            {
+                Properties.Settings.Default["modulemanager"] = saveFileDialog.FileName;
+                this.save();
+            }
+            else
+            {
+                MessageBox.Show("Error: Could not save chosen file");
+            }
+        }
+
+        /// <summary>
+        /// Create a temp ModuleManager and save it to the path given in the settings
+        /// </summary>
+        private void save()
+        {
+            string path = Properties.Settings.Default["modulemanager"].ToString();
+
+            ModuleManager moduleManager = new ModuleManager();
+            moduleManager.modules = this.modules;
+            moduleManager.successModules = this.successModules;
+
+            Serializer.SerializeObject<ModuleManager>(moduleManager, path);
+
+            this.changed = false;
         }
     }
 }

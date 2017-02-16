@@ -17,27 +17,12 @@ namespace CheckMaster
         /// <typeparam name="T"></typeparam>
         /// <param name="serializableObject"></param>
         /// <param name="fileName"></param>
-        public void SerializeObject<T>(T serializableObject, string fileName)
+        public static void SerializeObject<T>(T serializableObject, string fileName, bool append = false)
         {
-            if (serializableObject == null) { return; }
-
-            try
+            using (Stream stream = File.Open(fileName, append ? FileMode.Append : FileMode.Create))
             {
-                XmlDocument xmlDocument = new XmlDocument();
-                XmlSerializer serializer = new XmlSerializer(serializableObject.GetType());
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    serializer.Serialize(stream, serializableObject);
-                    stream.Position = 0;
-                    xmlDocument.Load(stream);
-                    xmlDocument.Save(fileName);
-                    stream.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.Data);
+                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                binaryFormatter.Serialize(stream, serializableObject);
             }
         }
 
@@ -48,38 +33,13 @@ namespace CheckMaster
         /// <typeparam name="T"></typeparam>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public T DeSerializeObject<T>(string fileName)
+        public static T DeSerializeObject<T>(string fileName)
         {
-            if (string.IsNullOrEmpty(fileName)) { return default(T); }
-
-            T objectOut = default(T);
-
-            try
+            using (Stream stream = File.Open(fileName, FileMode.Open))
             {
-                XmlDocument xmlDocument = new XmlDocument();
-                xmlDocument.Load(fileName);
-                string xmlString = xmlDocument.OuterXml;
-
-                using (StringReader read = new StringReader(xmlString))
-                {
-                    Type outType = typeof(T);
-
-                    XmlSerializer serializer = new XmlSerializer(outType);
-                    using (XmlReader reader = new XmlTextReader(read))
-                    {
-                        objectOut = (T)serializer.Deserialize(reader);
-                        reader.Close();
-                    }
-
-                    read.Close();
-                }
+                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                return (T)binaryFormatter.Deserialize(stream);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-            return objectOut;
         }
     }
 }

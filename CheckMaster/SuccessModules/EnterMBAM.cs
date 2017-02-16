@@ -10,13 +10,11 @@ namespace CheckMaster.SuccessModules
 {
     class EnterMBAM : SuccessModule
     {
-        private bool readFromCSV;
-        private string name;
+        private string readFromCSV;
 
         public EnterMBAM()
         {
-            this.readFromCSV = false;
-            this.name = "";
+            this.readFromCSV = "";
         }
 
         public Control[] getEditControls()
@@ -28,41 +26,54 @@ namespace CheckMaster.SuccessModules
             changeNameLabel.Location = new System.Drawing.Point(0, 0);
             changeNameLabel.Width = 50;
             changeNameLabel.Text = "Name:";
-            controls.Add(changeNameLabel);
+            //controls.Add(changeNameLabel);
 
             // ChangeName
             TextBox changeName = new TextBox();
             changeName.Location = new System.Drawing.Point(50,0);
             changeName.Width = 100;
             changeName.Multiline = false;
-            changeName.TextChanged += new EventHandler(NameChangedEvent);
-            controls.Add(changeName);
+            //changeName.TextChanged += new EventHandler(NameChangedEvent);
+            //controls.Add(changeName);
+
+            // ReadFromCSVLabel
+            Label ReadFromCSVLabel = new Label();
+            ReadFromCSVLabel.Location = new System.Drawing.Point(0, 0);
+            ReadFromCSVLabel.Width = 300;
+            ReadFromCSVLabel.Text = "Read From CSV:";
+            controls.Add(ReadFromCSVLabel);
 
             // ReadFromCSV
-            CheckBox readFromCSVCB = new CheckBox();
+            TextBox readFromCSVCB = new TextBox();
             readFromCSVCB.Location = new System.Drawing.Point(0, 25);
             readFromCSVCB.Width = 250;
-            readFromCSVCB.Checked = readFromCSV;
-            readFromCSVCB.CheckedChanged += new EventHandler(ReadFromCSVChanged);
-            readFromCSVCB.Text = "Read From Excel";
+            readFromCSVCB.Text = this.readFromCSV;
+            readFromCSVCB.TextChanged += new EventHandler(ReadFromCSV_TextChanged);
             controls.Add(readFromCSVCB);
+
+            // ReadFromCSVDescription
+            Label ReadFromCSVDescription = new Label();
+            ReadFromCSVDescription.Location = new System.Drawing.Point(0, 50);
+            ReadFromCSVDescription.Width = 450;
+            ReadFromCSVDescription.Height = 250;
+            ReadFromCSVDescription.ForeColor = System.Drawing.Color.Gray;
+            ReadFromCSVDescription.Text = "Leave this to empty, to deactivate.\nEnter the file name and insert the file into the same directory with the application's .exe";
+            controls.Add(ReadFromCSVDescription);
+
+            Label RememberToRemoveTPM = new Label();
+            RememberToRemoveTPM.Location = new System.Drawing.Point(0, 120);
+            RememberToRemoveTPM.Width = 450;
+            RememberToRemoveTPM.Height = 250;
+            RememberToRemoveTPM.ForeColor = System.Drawing.Color.Gray;
+            RememberToRemoveTPM.Text = "If you want it so that the Bitlocker password will be asked on boot,\nalso add the Remove TPM Success Module.";
+            controls.Add(RememberToRemoveTPM);
 
             return controls.ToArray();
         }
 
-        private void ReadFromCSVChanged(object sender, EventArgs e)
+        private void ReadFromCSV_TextChanged(object sender, EventArgs e)
         {
-            this.readFromCSV = ((CheckBox)sender).Checked;
-        }
-
-        private void NameChangedEvent(object sender, EventArgs a)
-        {
-            this.name = ((TextBox)sender).Text;
-        }
-
-        public string getName()
-        {
-            return this.name;
+            this.readFromCSV = ((TextBox)sender).Text;
         }
 
         public void run()

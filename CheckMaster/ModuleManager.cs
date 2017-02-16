@@ -1,4 +1,5 @@
 ﻿using CheckMaster.Modules;
+using CheckMaster.Restrictions;
 using CheckMaster.SuccessModules;
 using System;
 using System.Collections.Generic;
@@ -14,20 +15,18 @@ namespace CheckMaster
     [Serializable]
     public class ModuleManager
     {
-        [XmlArray]
-        public List<Module> modules;
-        [XmlArray]
-        public List<SuccessModule> successModules;
+        public Dictionary<Module, List<Restriction>> modules;
+        public Dictionary<SuccessModule, List<Restriction>> successModules;
 
         public ModuleManager()
         {
-            this.modules = new List<Module>();
-            this.successModules = new List<SuccessModule>();
+            this.modules = new Dictionary<Module, List<Restriction>>();
+            this.successModules = new Dictionary<SuccessModule, List<Restriction>>();
         }
 
         public void init()
         {
-            foreach (Module module in modules)
+            foreach (Module module in modules.Keys)
             {
                 module.init();
             }
@@ -35,7 +34,7 @@ namespace CheckMaster
 
         public void check()
         {
-            foreach (Module module in modules)
+            foreach (Module module in modules.Keys)
             {
                 module.check();
             }
@@ -43,7 +42,7 @@ namespace CheckMaster
 
         public bool failed()
         {
-            foreach (Module module in modules)
+            foreach (Module module in modules.Keys)
             {
                 if (module.getStatus() == Status.ERROR || module.getStatus() == Status.FAIL)
                 {
@@ -56,7 +55,7 @@ namespace CheckMaster
 
         public void runSuccess()
         {
-            foreach (SuccessModule successModule in successModules)
+            foreach (SuccessModule successModule in successModules.Keys)
             {
                 successModule.run();
             }

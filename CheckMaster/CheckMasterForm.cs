@@ -42,8 +42,7 @@ namespace CheckMaster
         /// </summary>
         private void startUpdateLoop()
         {
-            if(t.IsAlive == false)
-                t.Start();
+            t.Start();
         }
 
         /// <summary>
@@ -84,21 +83,16 @@ namespace CheckMaster
         private void editButton_Click(object sender, EventArgs e)
         {
             EditModulesForm editModulesForm = new CheckMaster.EditModulesForm();
+            editModulesForm.TopMost = true;
             editModulesForm.FormClosing += new FormClosingEventHandler(editModulesForm_FormClosing);
             editModulesForm.Show();
+            this.Enabled = false;
         }
 
         private void editModulesForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (((EditModulesForm)sender).saving) {
-                moduleManager.modules.Clear();
-                moduleManager.modules.AddRange(((EditModulesForm)sender).GetModules());
-
-                moduleManager.successModules.Clear();
-                moduleManager.successModules.AddRange(((EditModulesForm)sender).GetSuccessModules());
-
-                serializer.SerializeObject<ModuleManager>(moduleManager, Properties.Settings.Default["modulemanager"].ToString());
-            }
+            loadModuleManagerFromFile();
+            this.Enabled = true;
         }
 
         private void computerInfo_Click(object sender, EventArgs e)
@@ -134,38 +128,36 @@ namespace CheckMaster
                 File.Exists(Properties.Settings.Default["modulemanager"].ToString()) == false
                 )
             {
-                Properties.Settings.Default["modulemanager"] = Application.StartupPath + "/defaultmodules.xml";
+                Properties.Settings.Default["modulemanager"] = Application.StartupPath + "/default.modules";
             }
 
             // Check if found
             if (File.Exists(Properties.Settings.Default["modulemanager"].ToString()))
             {
                 Console.WriteLine("Init ModuleManager");
-                moduleManager = serializer.DeSerializeObject<ModuleManager>(Properties.Settings.Default["modulemanager"].ToString());
+                moduleManager = Serializer.DeSerializeObject<ModuleManager>(Properties.Settings.Default["modulemanager"].ToString());
             }
             else // If not, then create one and initialize it
             {
                 Console.WriteLine("Create ModuleManager");
                 moduleManager = new ModuleManager();
-                serializer.SerializeObject<ModuleManager>(moduleManager, Properties.Settings.Default["modulemanager"].ToString());
+                Serializer.SerializeObject<ModuleManager>(moduleManager, Properties.Settings.Default["modulemanager"].ToString());
             }
         }
 
         private void loadSettingsButton_Click(object sender, EventArgs e)
         {
-            stopUpdateLoop();
             OpenFileDialog openXMLFileDialog = new OpenFileDialog();
 
-            openXMLFileDialog.InitialDirectory = "c:\\";
-            openXMLFileDialog.Filter = "XML Files (*.xml)|*.xml";
+            openXMLFileDialog.InitialDirectory = Application.ExecutablePath;
+            openXMLFileDialog.Filter = "Modules Files (*.modules)|*.modules";
             openXMLFileDialog.FilterIndex = 0;
             openXMLFileDialog.RestoreDirectory = true;
 
             if (openXMLFileDialog.ShowDialog() == DialogResult.OK)
             {
-                Console.WriteLine(openXMLFileDialog.FileName);
+                this.moduleManager = Serializer.DeSerializeObject<ModuleManager>(openXMLFileDialog.FileName);
             }
-            startUpdateLoop();
         }
     }
 }

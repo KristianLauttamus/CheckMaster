@@ -40,13 +40,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.editSuccessModuleRestrictions = new System.Windows.Forms.Button();
             this.editModuleRestrictions = new System.Windows.Forms.Button();
+            this.saveAsButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // saveButton
             // 
-            this.saveButton.Location = new System.Drawing.Point(797, 402);
+            this.saveButton.Location = new System.Drawing.Point(692, 402);
             this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(75, 23);
+            this.saveButton.Size = new System.Drawing.Size(99, 23);
             this.saveButton.TabIndex = 0;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
@@ -160,11 +161,22 @@
             this.editModuleRestrictions.Text = "Edit Restrictions...";
             this.editModuleRestrictions.UseVisualStyleBackColor = true;
             // 
+            // saveAsButton
+            // 
+            this.saveAsButton.Location = new System.Drawing.Point(797, 402);
+            this.saveAsButton.Name = "saveAsButton";
+            this.saveAsButton.Size = new System.Drawing.Size(75, 23);
+            this.saveAsButton.TabIndex = 12;
+            this.saveAsButton.Text = "Save As...";
+            this.saveAsButton.UseVisualStyleBackColor = true;
+            this.saveAsButton.Click += new System.EventHandler(this.saveAsButton_Click);
+            // 
             // EditModulesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 432);
+            this.Controls.Add(this.saveAsButton);
             this.Controls.Add(this.editModuleRestrictions);
             this.Controls.Add(this.editSuccessModuleRestrictions);
             this.Controls.Add(this.label1);
@@ -202,5 +214,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button editSuccessModuleRestrictions;
         private System.Windows.Forms.Button editModuleRestrictions;
+        private System.Windows.Forms.Button saveAsButton;
     }
 }
