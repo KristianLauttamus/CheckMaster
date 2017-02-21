@@ -58,6 +58,11 @@ namespace CheckMaster
 
                 // Access UI elements
                 MethodInvoker mi = delegate () {
+                    this.statusList.Items.Clear();
+                    this.statusList.Items.AddRange(moduleManager.getStatusesWithMessages());
+                    
+                    this.howManyRanLabel.Text = "Ran " + this.moduleManager.modules.Count + " modules";
+
                     if (moduleManager.failed())
                     {
                         this.okButton.Enabled = false;
@@ -66,6 +71,9 @@ namespace CheckMaster
                     {
                         this.okButton.Enabled = true;
                     }
+
+                    // Update current file -label
+                    this.currentFileLabel.Text = Properties.Settings.Default["modulemanager"].ToString();
                 };
 
                 this.Invoke(mi);
@@ -82,7 +90,7 @@ namespace CheckMaster
 
         private void editButton_Click(object sender, EventArgs e)
         {
-            EditModulesForm editModulesForm = new CheckMaster.EditModulesForm();
+            EditModulesForm editModulesForm = new EditModulesForm(moduleManager);
             editModulesForm.TopMost = true;
             editModulesForm.FormClosing += new FormClosingEventHandler(editModulesForm_FormClosing);
             editModulesForm.Show();
@@ -98,6 +106,7 @@ namespace CheckMaster
         private void computerInfo_Click(object sender, EventArgs e)
         {
             ComputerInfoForm computerInfoForm = new ComputerInfoForm();
+            computerInfoForm.TopMost = true;
             computerInfoForm.Show();
         }
 
@@ -128,14 +137,14 @@ namespace CheckMaster
                 File.Exists(Properties.Settings.Default["modulemanager"].ToString()) == false
                 )
             {
-                Properties.Settings.Default["modulemanager"] = Application.StartupPath + "/default.modules";
+                Properties.Settings.Default["modulemanager"] = "default.modules";
             }
 
             // Check if found
             if (File.Exists(Properties.Settings.Default["modulemanager"].ToString()))
             {
                 Console.WriteLine("Init ModuleManager");
-                moduleManager = Serializer.DeSerializeObject<ModuleManager>(Properties.Settings.Default["modulemanager"].ToString());
+                moduleManager = FileSaver.load();
             }
             else // If not, then create one and initialize it
             {
@@ -147,17 +156,7 @@ namespace CheckMaster
 
         private void loadSettingsButton_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openXMLFileDialog = new OpenFileDialog();
-
-            openXMLFileDialog.InitialDirectory = Application.ExecutablePath;
-            openXMLFileDialog.Filter = "Modules Files (*.modules)|*.modules";
-            openXMLFileDialog.FilterIndex = 0;
-            openXMLFileDialog.RestoreDirectory = true;
-
-            if (openXMLFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                this.moduleManager = Serializer.DeSerializeObject<ModuleManager>(openXMLFileDialog.FileName);
-            }
+            this.moduleManager = FileSaver.loadDialog();
         }
     }
 }

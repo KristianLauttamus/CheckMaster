@@ -34,6 +34,7 @@
             this.statusList = new System.Windows.Forms.ListBox();
             this.computerInfo = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
+            this.currentFileLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // editButton
@@ -98,11 +99,21 @@
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
+            // currentFileLabel
+            // 
+            this.currentFileLabel.AutoSize = true;
+            this.currentFileLabel.Location = new System.Drawing.Point(160, 262);
+            this.currentFileLabel.Name = "currentFileLabel";
+            this.currentFileLabel.Size = new System.Drawing.Size(60, 13);
+            this.currentFileLabel.TabIndex = 6;
+            this.currentFileLabel.Text = "Current File";
+            // 
             // CheckMasterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(460, 292);
+            this.Controls.Add(this.currentFileLabel);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.computerInfo);
             this.Controls.Add(this.statusList);
@@ -130,6 +141,7 @@
         private System.Windows.Forms.ListBox statusList;
         private System.Windows.Forms.Button computerInfo;
         private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Label currentFileLabel;
     }
 }
 

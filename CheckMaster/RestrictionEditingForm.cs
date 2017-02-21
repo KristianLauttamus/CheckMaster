@@ -78,5 +78,39 @@ namespace CheckMaster
             this.restrictionsListBox.Items.Add(restriction);
             this.restrictionsComboBox.SelectedIndex = -1;
         }
+
+        private void restrictionsListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.editPanel.Controls.Clear();
+
+            if (((ListBox)sender).SelectedIndex > -1)
+                this.editPanel.Controls.AddRange(((Restriction)((ListBox)sender).Items[((ListBox)sender).SelectedIndex]).getEditControls());
+        }
+
+        private void save()
+        {
+            Restriction[] restrictions = new Restriction[this.restrictionsListBox.Items.Count];
+
+            for (int i = 0; i < restrictions.Length; i++)
+            {
+                restrictions[i] = (Restriction)this.restrictionsListBox.Items[i];
+            }
+
+            if (this.module != null)
+            {
+                this.module.clearRestrictions();
+                this.module.addRestrictions(restrictions);
+            }
+            else if (this.successModule != null)
+            {
+                this.successModule.clearRestrictions();
+                this.successModule.addRestrictions(restrictions);
+            }
+        }
+
+        private void RestrictionEditingForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.save();
+        }
     }
 }

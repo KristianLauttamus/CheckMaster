@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace CheckMaster.Modules
 {
     [Serializable]
-    class ReadFileAndCheckFor : Module
+    class ReadFileAndCheckFor : MasterModule
     {
         private String FILE_PATH;
 
@@ -36,7 +36,7 @@ namespace CheckMaster.Modules
             this.runOnCheck = false;
         }
 
-        public void check()
+        public override void check()
         {
             if (runOnCheck)
             {
@@ -44,7 +44,7 @@ namespace CheckMaster.Modules
             }
         }
 
-        public Control[] getEditControls()
+        public override Control[] getEditControls()
         {
             List<Control> controls = new List<Control>();
 
@@ -279,22 +279,17 @@ namespace CheckMaster.Modules
         }
         #endregion
 
-        public string[] getErrors()
+        public override string[] getErrors()
         {
             return this.errors.ToArray();
         }
 
-        public string getName()
-        {
-            return "";
-        }
-
-        public Status getStatus()
+        public override Status getStatus()
         {
             return this.status;
         }
 
-        public void init()
+        public override void init()
         {
             this.checkFile();
         }
@@ -303,6 +298,7 @@ namespace CheckMaster.Modules
         {
             this.errors.Clear();
             this.status = Status.NOTRUN;
+
             if (File.Exists(this.FILE_PATH))
             {
                 FileStream fs = File.OpenRead(this.FILE_PATH);
@@ -359,44 +355,6 @@ namespace CheckMaster.Modules
                 this.status = Status.FAIL;
             }
         }
-
-        #region Restrictions
-        private List<Restriction> restrictions = new List<Restriction>();
-
-        public void addRestriction(Restriction restriction)
-        {
-            this.restrictions.Add(restriction);
-        }
-
-        public void removeRestriction(int index)
-        {
-            this.restrictions.RemoveAt(index);
-        }
-
-        public void initRestrictions()
-        {
-            foreach (Restriction restriction in this.restrictions)
-            {
-                restriction.init();
-            }
-        }
-
-        public bool isRestricted()
-        {
-            foreach (Restriction restriction in this.restrictions)
-            {
-                if (restriction.approved() == false)
-                    return true;
-            }
-
-            return false;
-        }
-
-        public List<Restriction> getRestrictions()
-        {
-            return this.restrictions;
-        }
-        #endregion
 
         public override string ToString()
         {

@@ -62,9 +62,9 @@
             this.moduleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.moduleLabel.Location = new System.Drawing.Point(57, 12);
             this.moduleLabel.Name = "moduleLabel";
-            this.moduleLabel.Size = new System.Drawing.Size(47, 15);
+            this.moduleLabel.Size = new System.Drawing.Size(106, 15);
             this.moduleLabel.TabIndex = 2;
-            this.moduleLabel.Text = "label2";
+            this.moduleLabel.Text = "Module\'s name";
             // 
             // editPanel
             // 
@@ -89,14 +89,16 @@
             this.restrictionsListBox.Name = "restrictionsListBox";
             this.restrictionsListBox.Size = new System.Drawing.Size(193, 186);
             this.restrictionsListBox.TabIndex = 5;
+            this.restrictionsListBox.SelectedIndexChanged += new System.EventHandler(this.restrictionsListBox_SelectedIndexChanged);
             // 
             // restrictionsComboBox
             // 
+            this.restrictionsComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.restrictionsComboBox.FormattingEnabled = true;
             this.restrictionsComboBox.Location = new System.Drawing.Point(12, 33);
             this.restrictionsComboBox.Name = "restrictionsComboBox";
             this.restrictionsComboBox.Size = new System.Drawing.Size(193, 21);
-            this.restrictionsComboBox.TabIndex = 6;
+            this.restrictionsComboBox.TabIndex = 0;
             this.restrictionsComboBox.SelectedIndexChanged += new System.EventHandler(this.restrictionsComboBox_SelectedIndexChanged);
             // 
             // RestrictionEditingForm
@@ -113,6 +115,7 @@
             this.Controls.Add(this.closeButton);
             this.Name = "RestrictionEditingForm";
             this.Text = "RestrictionEditingForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RestrictionEditingForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

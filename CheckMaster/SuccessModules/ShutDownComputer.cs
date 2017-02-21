@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace CheckMaster.SuccessModules
 {
-    class ShutDownComputer : SuccessModule
+    class ShutDownComputer : MasterSuccessModule
     {
         private int seconds;
         private string name;
@@ -22,7 +22,7 @@ namespace CheckMaster.SuccessModules
             this.force = false;
         }
 
-        public Control[] getEditControls()
+        public override Control[] getEditControls()
         {
             List<Control> controls = new List<Control>();
 
@@ -83,7 +83,7 @@ namespace CheckMaster.SuccessModules
             this.name = ((TextBox)sender).Text;
         }
 
-        public void run()
+        public override void run()
         {
             string forceOption = " ";
             if (this.force)
@@ -95,44 +95,6 @@ namespace CheckMaster.SuccessModules
             psi.UseShellExecute = false;
             Process.Start(psi);
         }
-
-        #region Restrictions
-        private List<Restriction> restrictions = new List<Restriction>();
-
-        public void addRestriction(Restriction restriction)
-        {
-            this.restrictions.Add(restriction);
-        }
-
-        public void removeRestriction(int index)
-        {
-            this.restrictions.RemoveAt(index);
-        }
-
-        public void initRestrictions()
-        {
-            foreach (Restriction restriction in this.restrictions)
-            {
-                restriction.init();
-            }
-        }
-
-        public bool isRestricted()
-        {
-            foreach (Restriction restriction in this.restrictions)
-            {
-                if (restriction.approved() == false)
-                    return true;
-            }
-
-            return false;
-        }
-
-        public List<Restriction> getRestrictions()
-        {
-            return this.restrictions;
-        }
-        #endregion
 
         public override string ToString()
         {

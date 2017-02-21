@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -65,7 +68,22 @@
     <Compile Include="EditModulesForm.Designer.cs">
       <DependentUpon>EditModulesForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileDialogs\LoadFileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileDialogs\LoadFileForm.Designer.cs">
+      <DependentUpon>LoadFileForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileDialogs\SaveFileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileDialogs\SaveFileForm.Designer.cs">
+      <DependentUpon>SaveFileForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileSaver.cs" />
     <Compile Include="ListBoxItem.cs" />
+    <Compile Include="Modules\MasterModule.cs" />
+    <Compile Include="Modules\CheckBitlockerStatus.cs" />
     <Compile Include="Modules\CheckFileExisting.cs" />
     <Compile Include="Modules\LaunchProgramIfExists.cs" />
     <Compile Include="Modules\Module.cs" />
@@ -79,11 +97,14 @@
       <DependentUpon>RestrictionEditingForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Restrictions\ComputerSystemContains.cs" />
+    <Compile Include="Restrictions\ComputerSystemDoesntContain.cs" />
     <Compile Include="Restrictions\Restriction.cs" />
     <Compile Include="Serializer.cs" />
     <Compile Include="ModuleManager.cs" />
     <Compile Include="Status.cs" />
     <Compile Include="SuccessModules\EnterMBAM.cs" />
+    <Compile Include="SuccessModules\MasterSuccessModule.cs" />
+    <Compile Include="SuccessModules\RemoveTPM.cs" />
     <Compile Include="SuccessModules\ShutDownComputer.cs" />
     <Compile Include="SuccessModules\SuccessModule.cs" />
     <Compile Include="WMIController.cs" />
@@ -95,6 +116,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EditModulesForm.resx">
       <DependentUpon>EditModulesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileDialogs\LoadFileForm.resx">
+      <DependentUpon>LoadFileForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileDialogs\SaveFileForm.resx">
+      <DependentUpon>SaveFileForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -108,6 +135,7 @@
     <EmbeddedResource Include="RestrictionEditingForm.resx">
       <DependentUpon>RestrictionEditingForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

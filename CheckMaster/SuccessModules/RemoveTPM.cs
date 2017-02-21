@@ -8,50 +8,21 @@ using CheckMaster.Restrictions;
 
 namespace CheckMaster.SuccessModules
 {
-    class RemoveTPM : SuccessModule
+    class RemoveTPM : MasterSuccessModule
     {
-        public RemoveTPM()
-        {
-            this.restrictions = new List<Restriction>();
-        }
-
-        public Control[] getEditControls()
+        public override Control[] getEditControls()
         {
             return new Control[0];
         }
 
-        public void run()
+        public override void run()
         {
             WMIController.removeTPM(WMIController.getDeviceID());
         }
 
-        #region Restrictions
-        private List<Restriction> restrictions;
-
-        public void addRestriction(Restriction restriction)
+        public override string ToString()
         {
-            throw new NotImplementedException();
+            return "Remove TPM";
         }
-
-        public List<Restriction> getRestrictions()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void initRestrictions()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool isRestricted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void removeRestriction(int index)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
     }
 }

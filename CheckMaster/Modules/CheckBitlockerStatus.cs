@@ -8,22 +8,16 @@ using CheckMaster.Restrictions;
 
 namespace CheckMaster.Modules
 {
-    class CheckBitlockerStatus : Module
+    class CheckBitlockerStatus : MasterModule
     {
         private Status status;
-        private List<Restriction> restrictions;
 
-        public CheckBitlockerStatus()
-        {
-            this.restrictions = new List<Restriction>();
-        }
-
-        public void init()
+        public override void init()
         {
             this.status = Status.NOTRUN;
         }
 
-        public void check()
+        public override void check()
         {
             if (WMIController.checkBitLockerStatus())
             {
@@ -35,12 +29,12 @@ namespace CheckMaster.Modules
             }
         }
 
-        public Control[] getEditControls()
+        public override Control[] getEditControls()
         {
             return new Control[0];
         }
 
-        public string[] getErrors()
+        public override string[] getErrors()
         {
             if (this.status == Status.FAIL)
             {
@@ -54,47 +48,14 @@ namespace CheckMaster.Modules
             return new string[0];
         }
 
-        public Status getStatus()
+        public override Status getStatus()
         {
             return this.status;
         }
 
-        #region Restrictions
-        public void addRestriction(Restriction restriction)
+        public override string ToString()
         {
-            this.restrictions.Add(restriction);
+            return "Check Bitlocker Status";
         }
-
-        public void initRestrictions()
-        {
-            foreach (Restriction restriction in restrictions)
-            {
-                restriction.init();
-            }
-        }
-
-        public List<Restriction> getRestrictions()
-        {
-            return this.restrictions;
-        }
-
-        public bool isRestricted()
-        {
-            foreach (Restriction restriction in restrictions)
-            {
-                if (restriction.approved() == false)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public void removeRestriction(int index)
-        {
-            this.restrictions.RemoveAt(index);
-        }
-        #endregion
     }
 }

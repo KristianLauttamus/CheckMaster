@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="modulemanager" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">default.modules</Value>
     </Setting>
   </Settings>
 </SettingsFile>

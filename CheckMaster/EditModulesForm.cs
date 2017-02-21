@@ -17,15 +17,15 @@ namespace CheckMaster
 {
     public partial class EditModulesForm : Form
     {
-        Dictionary<Modules.Module, List<Restriction>> modules;
-        Dictionary<SuccessModule, List<Restriction>> successModules;
+        List<Modules.Module> modules;
+        List<SuccessModule> successModules;
 
         public bool changed;
 
-        public EditModulesForm()
+        public EditModulesForm(ModuleManager moduleManager)
         {
-            modules = new Dictionary<Modules.Module, List<Restriction>>();
-            successModules = new Dictionary<SuccessModule, List<Restriction>>();
+            modules = moduleManager.modules;
+            successModules = moduleManager.successModules;
             changed = false;
 
             InitializeComponent();
@@ -37,12 +37,12 @@ namespace CheckMaster
             loadSuccessModules();
         }
 
-        public Dictionary<Modules.Module, List<Restriction>> GetModules()
+        public List<Modules.Module> GetModules()
         {
             return this.modules;
         }
 
-        public Dictionary<SuccessModule, List<Restriction>> GetSuccessModules()
+        public List<SuccessModule> GetSuccessModules()
         {
             return this.successModules;
         }
@@ -56,8 +56,11 @@ namespace CheckMaster
                     where t.IsClass && t.Namespace == @namespace
                     select t;
             q.ToList().ForEach(m => {
-                Modules.Module instance = (Modules.Module)Activator.CreateInstance(m);
-                this.modulesSelection.Items.Add(instance);
+                if (m.Name.Contains("MasterModule") == false)
+                {
+                    Modules.Module instance = (Modules.Module)Activator.CreateInstance(m);
+                    this.modulesSelection.Items.Add(instance);
+                }
             }
             );
         }
@@ -119,11 +122,14 @@ namespace CheckMaster
             string @namespace = "CheckMaster.SuccessModules";
 
             var q = from t in Assembly.GetExecutingAssembly().GetTypes()
-                    where t.IsClass && t.Namespace == @namespace
+                    where t.IsClass && t.Namespace == @namespace && t.Name != "MasterSuccessModule"
                     select t;
             q.ToList().ForEach(sm => {
-                SuccessModule instance = (SuccessModule)Activator.CreateInstance(sm);
-                this.successModulesSelection.Items.Add(instance);
+                if (sm.Name.Contains("MasterSuccessModule") == false)
+                {
+                    SuccessModule instance = (SuccessModule)Activator.CreateInstance(sm);
+                    this.successModulesSelection.Items.Add(instance);
+                }
             });
         }
 
@@ -200,13 +206,17 @@ namespace CheckMaster
             {
                 SuccessModule sm = (SuccessModule)addedSuccessModulesList.Items[addedSuccessModulesList.SelectedIndex];
                 RestrictionEditingForm restrictionEditingForm = new RestrictionEditingForm(sm);
+                restrictionEditingForm.TopMost = true;
                 restrictionEditingForm.Show();
             }
         }
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            this.save();
+            ModuleManager moduleManager = new ModuleManager();
+            moduleManager.modules = this.modules;
+            moduleManager.successModules = this.successModules;
+            FileSaver.save(moduleManager);
 
             this.changed = false;
             this.Close();
@@ -214,36 +224,24 @@ namespace CheckMaster
 
         private void saveAsButton_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Modules File|*.modules";
-            saveFileDialog.Title = "Save an Image File";
-            saveFileDialog.ShowDialog();
-
-            if (saveFileDialog.FileName != "")
-            {
-                Properties.Settings.Default["modulemanager"] = saveFileDialog.FileName;
-                this.save();
-            }
-            else
-            {
-                MessageBox.Show("Error: Could not save chosen file");
-            }
-        }
-
-        /// <summary>
-        /// Create a temp ModuleManager and save it to the path given in the settings
-        /// </summary>
-        private void save()
-        {
-            string path = Properties.Settings.Default["modulemanager"].ToString();
-
             ModuleManager moduleManager = new ModuleManager();
             moduleManager.modules = this.modules;
             moduleManager.successModules = this.successModules;
-
-            Serializer.SerializeObject<ModuleManager>(moduleManager, path);
+            FileSaver.saveDialog(moduleManager);
 
             this.changed = false;
+            this.Close();
+        }
+
+        private void editModuleRestrictions_Click(object sender, EventArgs e)
+        {
+            if (this.addedModulesList.SelectedIndex >= 0)
+            {
+                Modules.Module m = (Modules.Module)addedModulesList.Items[addedModulesList.SelectedIndex];
+                RestrictionEditingForm restrictionEditingForm = new RestrictionEditingForm(m);
+                restrictionEditingForm.TopMost = true;
+                restrictionEditingForm.Show();
+            }
         }
     }
 }

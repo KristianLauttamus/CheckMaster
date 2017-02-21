@@ -160,6 +160,7 @@
             this.editModuleRestrictions.TabIndex = 11;
             this.editModuleRestrictions.Text = "Edit Restrictions...";
             this.editModuleRestrictions.UseVisualStyleBackColor = true;
+            this.editModuleRestrictions.Click += new System.EventHandler(this.editModuleRestrictions_Click);
             // 
             // saveAsButton
             // 

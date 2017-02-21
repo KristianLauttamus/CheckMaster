@@ -5,59 +5,94 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CheckMaster.Restrictions;
+using System.IO;
+using System.Diagnostics;
 
 namespace CheckMaster.Modules
 {
-    class LaunchProgramIfExists : Module
+    class LaunchProgramIfExists : MasterModule
     {
-        public void addRestriction(Restriction restriction)
+        private Status status;
+        private string filepath;
+
+        public LaunchProgramIfExists()
         {
-            throw new NotImplementedException();
+            this.status = Status.NOTRUN;
         }
 
-        public void check()
+        public override void init()
         {
-            throw new NotImplementedException();
+            if (File.Exists(this.filepath))
+            {
+                try
+                {
+                    Process.Start(this.filepath);
+                    this.status = Status.OK;
+                }
+                catch
+                {
+                    this.status = Status.ERROR;
+                }
+            }
+            else
+            {
+                this.status = Status.FAIL;
+            }
         }
 
-        public Control[] getEditControls()
+        public override void check()
         {
-            throw new NotImplementedException();
+            return;
+        }
+        
+        public override string[] getErrors()
+        {
+            if (this.status == Status.FAIL)
+            {
+                return new string[] { "File not found" };
+            }
+            else if (this.status == Status.ERROR)
+            {
+                return new string[] { "Could not open file" };
+            }
+
+            return new string[] { "Not ran yet" };
         }
 
-        public string[] getErrors()
+        public override Status getStatus()
         {
-            throw new NotImplementedException();
+            return this.status;
         }
 
-        public List<Restriction> getRestrictions()
+        public override Control[] getEditControls()
         {
-            throw new NotImplementedException();
+            List<Control> controls = new List<Control>();
+
+            // Label
+            Label filepathLabel = new Label();
+            filepathLabel.Text = "Filepath";
+            filepathLabel.Location = new System.Drawing.Point(0,0);
+            filepathLabel.Width = 200;
+            controls.Add(filepathLabel);
+
+            // TextBox
+            TextBox filepathTextbox = new TextBox();
+            filepathTextbox.Width = 250;
+            filepathTextbox.Location = new System.Drawing.Point(0,25);
+            filepathTextbox.TextChanged += new EventHandler(filepathTextbox_TextChanged);
+            controls.Add(filepathTextbox);
+
+            return controls.ToArray();
         }
 
-        public Status getStatus()
+        private void filepathTextbox_TextChanged(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            this.filepath = ((TextBox)sender).Text;
         }
 
-        public void init()
+        public override string ToString()
         {
-            throw new NotImplementedException();
-        }
-
-        public void initRestrictions()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool isRestricted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void removeRestriction(int index)
-        {
-            throw new NotImplementedException();
+            return "Launch program if it exists";
         }
     }
 }

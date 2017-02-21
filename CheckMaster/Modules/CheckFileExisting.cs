@@ -10,30 +10,23 @@ using System.Windows.Forms;
 namespace CheckMaster.Modules
 {
     [Serializable]
-    class CheckFileExisting : Module
+    class CheckFileExisting : MasterModule
     {
         private String FILE_PATH;
         private Status status;
-        private String name;
 
         public CheckFileExisting()
         {
             this.FILE_PATH = "";
             this.status = Status.NOTRUN;
-            this.name = "";
         }
 
-        public string getName()
-        {
-            return this.name;
-        }
-
-        public void init()
+        public override void init()
         {
             status = Status.NOTRUN;
         }
 
-        public void check()
+        public override void check()
         {
             if (File.Exists(FILE_PATH))
             {
@@ -45,12 +38,12 @@ namespace CheckMaster.Modules
             }
         }
 
-        public Status getStatus()
+        public override Status getStatus()
         {
             return status;
         }
 
-        public string[] getErrors()
+        public override string[] getErrors()
         {
             if (status == Status.FAIL)
             {
@@ -60,50 +53,12 @@ namespace CheckMaster.Modules
             return new string[0];
         }
 
-        public Control[] getEditControls()
+        public override Control[] getEditControls()
         {
             List<Control> controls = new List<Control>();
 
             return controls.ToArray();
         }
-
-        #region Restrictions
-        private List<Restriction> restrictions = new List<Restriction>();
-
-        public void addRestriction(Restriction restriction)
-        {
-            this.restrictions.Add(restriction);
-        }
-
-        public void removeRestriction(int index)
-        {
-            this.restrictions.RemoveAt(index);
-        }
-
-        public void initRestrictions()
-        {
-            foreach (Restriction restriction in this.restrictions)
-            {
-                restriction.init();
-            }
-        }
-
-        public bool isRestricted()
-        {
-            foreach (Restriction restriction in this.restrictions)
-            {
-                if (restriction.approved() == false)
-                    return true;
-            }
-
-            return false;
-        }
-
-        public List<Restriction> getRestrictions()
-        {
-            return this.restrictions;
-        }
-        #endregion
 
         public override string ToString()
         {

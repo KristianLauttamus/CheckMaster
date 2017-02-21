@@ -33,9 +33,9 @@ namespace CheckMaster
         /// <typeparam name="T"></typeparam>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public static T DeSerializeObject<T>(string fileName)
+        public static T DeSerializeObject<T>(FileStream filestream)
         {
-            using (Stream stream = File.Open(fileName, FileMode.Open))
+            using (Stream stream = filestream)
             {
                 var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                 return (T)binaryFormatter.Deserialize(stream);

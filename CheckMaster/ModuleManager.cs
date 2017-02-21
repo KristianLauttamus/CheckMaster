@@ -15,18 +15,18 @@ namespace CheckMaster
     [Serializable]
     public class ModuleManager
     {
-        public Dictionary<Module, List<Restriction>> modules;
-        public Dictionary<SuccessModule, List<Restriction>> successModules;
+        public List<Module> modules;
+        public List<SuccessModule> successModules;
 
         public ModuleManager()
         {
-            this.modules = new Dictionary<Module, List<Restriction>>();
-            this.successModules = new Dictionary<SuccessModule, List<Restriction>>();
+            this.modules = new List<Module>();
+            this.successModules = new List<SuccessModule>();
         }
 
         public void init()
         {
-            foreach (Module module in modules.Keys)
+            foreach (Module module in modules)
             {
                 module.init();
             }
@@ -34,7 +34,7 @@ namespace CheckMaster
 
         public void check()
         {
-            foreach (Module module in modules.Keys)
+            foreach (Module module in modules)
             {
                 module.check();
             }
@@ -42,7 +42,7 @@ namespace CheckMaster
 
         public bool failed()
         {
-            foreach (Module module in modules.Keys)
+            foreach (Module module in modules)
             {
                 if (module.getStatus() == Status.ERROR || module.getStatus() == Status.FAIL)
                 {
@@ -55,10 +55,32 @@ namespace CheckMaster
 
         public void runSuccess()
         {
-            foreach (SuccessModule successModule in successModules.Keys)
+            foreach (SuccessModule successModule in successModules)
             {
                 successModule.run();
             }
+        }
+
+        public string[] getStatusesWithMessages()
+        {
+            List<String> statusesWithMessages = new List<String>();
+
+            foreach (Module module in modules)
+            {
+                String message = module.ToString() + " : " + module.getStatus();
+
+                if (module.getErrors().Length > 0)
+                {
+                    foreach (string error in module.getErrors())
+                    {
+                        message += "\n - " + error;
+                    }
+                }
+
+                statusesWithMessages.Add(message);
+            }
+
+            return statusesWithMessages.ToArray();
         }
     }
 }

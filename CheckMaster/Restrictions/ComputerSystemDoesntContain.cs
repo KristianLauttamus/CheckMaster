@@ -7,13 +7,13 @@ using System.Windows.Forms;
 
 namespace CheckMaster.Restrictions
 {
-    class ComputerSystemContains : Restriction
+    class ComputerSystemDoesntContain : Restriction
     {
         public string key;
         public string value;
         private Dictionary<string, string> computersystem;
 
-        public ComputerSystemContains()
+        public ComputerSystemDoesntContain()
         {
             this.key = "";
             this.value = "";
@@ -22,7 +22,7 @@ namespace CheckMaster.Restrictions
 
         public bool approved()
         {
-            return this.computersystem.ContainsKey(key) && this.computersystem[key].Contains(value);
+            return this.computersystem.ContainsKey(key) && this.computersystem[key].Contains(value) == false;
         }
 
         public Control[] getEditControls()
@@ -40,7 +40,7 @@ namespace CheckMaster.Restrictions
             // KeyTextBox
             ComboBox KeyComboBox = new ComboBox();
             KeyComboBox.Width = 200;
-            KeyComboBox.Location = new System.Drawing.Point(0,25);
+            KeyComboBox.Location = new System.Drawing.Point(0, 25);
             KeyComboBox.SelectedValueChanged += new EventHandler(KeyComboBox_SelectedValueChanged);
             KeyComboBox.Items.AddRange(WMIController.getComputerSystemInfoOptions());
             KeyComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -48,7 +48,7 @@ namespace CheckMaster.Restrictions
 
             // ValueLabel
             Label ValueLabel = new Label();
-            ValueLabel.Location = new System.Drawing.Point(0,50);
+            ValueLabel.Location = new System.Drawing.Point(0, 50);
             ValueLabel.Height = 25;
             ValueLabel.Width = 200;
             ValueLabel.Text = "Value";
@@ -60,7 +60,7 @@ namespace CheckMaster.Restrictions
             ValueTextBox.Location = new System.Drawing.Point(0, 75);
             ValueTextBox.TextChanged += new EventHandler(ValueTextBox_TextChanged);
             controls.Add(ValueTextBox);
-
+            
             // ComputerSystemInfo
             Button computerInfo = new Button();
             computerInfo.Location = new System.Drawing.Point(0, 200);
@@ -96,7 +96,7 @@ namespace CheckMaster.Restrictions
 
         public override string ToString()
         {
-            return "If ComputerSystem contains";
+            return "If ComputerSystem doesn't contain";
         }
     }
 }
