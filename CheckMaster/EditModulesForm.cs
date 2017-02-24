@@ -17,34 +17,23 @@ namespace CheckMaster
 {
     public partial class EditModulesForm : Form
     {
-        List<Modules.Module> modules;
-        List<SuccessModule> successModules;
-
         public bool changed;
 
         public EditModulesForm(ModuleManager moduleManager)
         {
-            modules = moduleManager.modules;
-            successModules = moduleManager.successModules;
             changed = false;
 
             InitializeComponent();
+
+            // Add items from excisting modulemanager
+            this.addedModulesList.Items.AddRange(moduleManager.modules.ToArray());
+            this.addedSuccessModulesList.Items.AddRange(moduleManager.successModules.ToArray());
 
             // Get all Modules
             loadModules();
 
             // Get all SuccessModules
             loadSuccessModules();
-        }
-
-        public List<Modules.Module> GetModules()
-        {
-            return this.modules;
-        }
-
-        public List<SuccessModule> GetSuccessModules()
-        {
-            return this.successModules;
         }
 
         #region Modules
@@ -83,7 +72,18 @@ namespace CheckMaster
         private void loadModule(Modules.Module m)
         {
             this.clearEditPanel();
-            this.editPanel.Controls.AddRange(m.getEditControls());
+            Control[] controls = m.getEditControls();
+
+            if (controls.Length == 0)
+            {
+                Label infoLabel = new Label();
+                infoLabel.Text = "No controls for this Module";
+                infoLabel.Width = 200;
+
+                controls = new Control[] { infoLabel };
+            }
+
+            this.editPanel.Controls.AddRange(controls);
         }
 
         private void addedModulesList_SelectedIndexChanged(object sender, EventArgs e)
@@ -151,7 +151,18 @@ namespace CheckMaster
         private void loadSuccessModule(SuccessModule sm)
         {
             this.clearEditPanel();
-            this.editPanel.Controls.AddRange(sm.getEditControls());
+            Control[] controls = sm.getEditControls();
+
+            if (controls.Length == 0)
+            {
+                Label infoLabel = new Label();
+                infoLabel.Text = "No controls for this SuccessModule";
+                infoLabel.Width = 200;
+
+                controls = new Control[] { infoLabel };
+            }
+
+            this.editPanel.Controls.AddRange(controls);
         }
 
         private void addedSuccessModulesList_SelectedIndexChanged(object sender, EventArgs e)
@@ -191,12 +202,14 @@ namespace CheckMaster
 
         private void EditModulesForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (this.changed && MessageBox.Show("Are you sure you want to exit editing without saving?",
-                       "Humans make mistakes",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Information) == DialogResult.No)
-            {
-                e.Cancel = true;
+            if (this.changed) {
+                if (MessageBox.Show("Are you sure you want to exit editing without saving?",
+                           "Humans make mistakes",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Information) == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
             }
         }
 
@@ -213,10 +226,7 @@ namespace CheckMaster
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            ModuleManager moduleManager = new ModuleManager();
-            moduleManager.modules = this.modules;
-            moduleManager.successModules = this.successModules;
-            FileSaver.save(moduleManager);
+            FileSaver.save(createModuleManager());
 
             this.changed = false;
             this.Close();
@@ -224,13 +234,29 @@ namespace CheckMaster
 
         private void saveAsButton_Click(object sender, EventArgs e)
         {
-            ModuleManager moduleManager = new ModuleManager();
-            moduleManager.modules = this.modules;
-            moduleManager.successModules = this.successModules;
-            FileSaver.saveDialog(moduleManager);
+            FileSaver.saveDialog(createModuleManager());
 
             this.changed = false;
             this.Close();
+        }
+
+        private ModuleManager createModuleManager()
+        {
+            ModuleManager moduleManager = new ModuleManager();
+
+            moduleManager.modules.Clear();
+            foreach(Modules.Module module in this.addedModulesList.Items)
+            {
+                moduleManager.modules.Add(module);
+            }
+
+            moduleManager.successModules.Clear();
+            foreach (SuccessModule module in this.addedSuccessModulesList.Items)
+            {
+                moduleManager.successModules.Add(module);
+            }
+
+            return moduleManager;
         }
 
         private void editModuleRestrictions_Click(object sender, EventArgs e)

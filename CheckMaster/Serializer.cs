@@ -28,10 +28,10 @@ namespace CheckMaster
 
 
         /// <summary>
-        /// Deserializes an xml file into an object list
+        /// Deserializes file to an object.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="fileName"></param>
+        /// <param name="filestream"></param>
         /// <returns></returns>
         public static T DeSerializeObject<T>(FileStream filestream)
         {

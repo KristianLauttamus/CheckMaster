@@ -17,15 +17,24 @@ namespace CheckMaster.Modules
 
         private Status status;
         private List<string> errors;
+        private List<ListBoxItem> rows;
         private bool runOnCheck;
 
+        [NonSerialized]
         private ListBox RowsList;
+        [NonSerialized]
         private ListBox RowItemsList;
+        [NonSerialized]
         private TextBox AddRowTextBox;
+        [NonSerialized]
         private TextBox AddRowItemTextBox;
+        [NonSerialized]
         private CheckBox RowDisallowCheckBox;
+        [NonSerialized]
         private Button RemoveRowButton;
+        [NonSerialized]
         private Button RemoveRowItemButton;
+        [NonSerialized]
         private Button AddRowItemButton;
 
         public ReadFileAndCheckFor()
@@ -61,6 +70,7 @@ namespace CheckMaster.Modules
             FilePathTextBox.Width = 200;
             FilePathTextBox.Multiline = false;
             FilePathTextBox.TextChanged += new EventHandler(FilePathChanged);
+            FilePathTextBox.Text = this.FILE_PATH;
             controls.Add(FilePathTextBox);
 
             // FilePathLabel
@@ -152,6 +162,7 @@ namespace CheckMaster.Modules
             RowItemsList.Height = 100;
             RowItemsList.Location = new System.Drawing.Point(250, 160);
             RowItemsList.SelectedIndexChanged += new EventHandler(RowItemsList_SelectedIndexChanged);
+            RowItemsList.Items.AddRange(this.rows.ToArray());
             controls.Add(RowItemsList);
 
             // RemoveRowItemButton
@@ -200,6 +211,9 @@ namespace CheckMaster.Modules
             {
                 ((ListBoxItem)this.RowsList.Items[this.RowsList.SelectedIndex]).items.RemoveAt(this.RowItemsList.SelectedIndex);
                 this.RowItemsList.Items.RemoveAt(this.RowItemsList.SelectedIndex);
+
+                // Serializable
+                this.rows.RemoveAt(this.RowItemsList.SelectedIndex);
             }
         }
 
@@ -248,6 +262,10 @@ namespace CheckMaster.Modules
 
             ListBoxItem item = (ListBoxItem)RowsList.Items[RowsList.SelectedIndex];
             item.disallowed = ((CheckBox)sender).Checked;
+
+            // Serializable
+            item = this.rows[RowsList.SelectedIndex];
+            item.disallowed = ((CheckBox)sender).Checked;
         }
 
         private void AddRowButton_Clicked(object sender, EventArgs e)
@@ -258,6 +276,9 @@ namespace CheckMaster.Modules
             listBoxItem.row = AddRowTextBox.Text;
             this.RowsList.Items.Add(listBoxItem);
 
+            // Serializable
+            this.rows.Add(listBoxItem);
+
             AddRowTextBox.Text = "";
         }
 
@@ -267,6 +288,9 @@ namespace CheckMaster.Modules
             {
                 return;
             }
+
+            // Serializable
+            this.rows[RowsList.SelectedIndex].items.Add(AddRowItemTextBox.Text);
 
             ((ListBoxItem)RowsList.Items[RowsList.SelectedIndex]).items.Add(AddRowItemTextBox.Text);
             RowItemsList.Items.Add(AddRowItemTextBox.Text);
@@ -296,6 +320,11 @@ namespace CheckMaster.Modules
 
         public void checkFile()
         {
+            if (this.rows == null)
+            {
+                this.rows = new List<ListBoxItem>();
+            }
+
             this.errors.Clear();
             this.status = Status.NOTRUN;
 
@@ -310,7 +339,7 @@ namespace CheckMaster.Modules
                     {
                         string line = sr.ReadLine();
 
-                        foreach (ListBoxItem item in this.RowsList.Items)
+                        foreach (ListBoxItem item in this.rows)
                         {
                             if (line.Contains(item.row))
                             {

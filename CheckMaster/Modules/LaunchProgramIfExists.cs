@@ -10,6 +10,7 @@ using System.Diagnostics;
 
 namespace CheckMaster.Modules
 {
+    [Serializable]
     class LaunchProgramIfExists : MasterModule
     {
         private Status status;
@@ -80,6 +81,7 @@ namespace CheckMaster.Modules
             filepathTextbox.Width = 250;
             filepathTextbox.Location = new System.Drawing.Point(0,25);
             filepathTextbox.TextChanged += new EventHandler(filepathTextbox_TextChanged);
+            filepathTextbox.Text = this.filepath;
             controls.Add(filepathTextbox);
 
             return controls.ToArray();

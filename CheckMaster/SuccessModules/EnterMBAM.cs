@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace CheckMaster.SuccessModules
 {
+    [Serializable]
     class EnterMBAM : MasterSuccessModule
     {
         private string readFromCSV;
@@ -21,26 +22,11 @@ namespace CheckMaster.SuccessModules
         {
             List<Control> controls = new List<Control>();
 
-            // ChangeNameLabel
-            Label changeNameLabel = new Label();
-            changeNameLabel.Location = new System.Drawing.Point(0, 0);
-            changeNameLabel.Width = 50;
-            changeNameLabel.Text = "Name:";
-            //controls.Add(changeNameLabel);
-
-            // ChangeName
-            TextBox changeName = new TextBox();
-            changeName.Location = new System.Drawing.Point(50,0);
-            changeName.Width = 100;
-            changeName.Multiline = false;
-            //changeName.TextChanged += new EventHandler(NameChangedEvent);
-            //controls.Add(changeName);
-
             // ReadFromCSVLabel
             Label ReadFromCSVLabel = new Label();
             ReadFromCSVLabel.Location = new System.Drawing.Point(0, 0);
             ReadFromCSVLabel.Width = 300;
-            ReadFromCSVLabel.Text = "Read From CSV:";
+            ReadFromCSVLabel.Text = "Read From CSV (Comma delimited):";
             controls.Add(ReadFromCSVLabel);
 
             // ReadFromCSV
@@ -57,8 +43,20 @@ namespace CheckMaster.SuccessModules
             ReadFromCSVDescription.Width = 450;
             ReadFromCSVDescription.Height = 250;
             ReadFromCSVDescription.ForeColor = System.Drawing.Color.Gray;
-            ReadFromCSVDescription.Text = "Leave this to empty, to deactivate.\nEnter the file name and insert the file into the same directory with the application's .exe";
+            ReadFromCSVDescription.Text = "Leave this to empty, to deactivate.\nEnter the file name and insert the file into the same directory with the application's .exe\nThis reads the first column as the key to look for and the second column as the value.";
             controls.Add(ReadFromCSVDescription);
+
+            // KeyLookType
+            List<String> options = new List<String>();
+            options.Add("Custom");
+            options.AddRange(WMIController.getComputerSystemInfoOptions());
+            
+            ComboBox KeyLookType = new ComboBox();
+            KeyLookType.Location = new System.Drawing.Point(0,100);
+            KeyLookType.Width = 450;
+            KeyLookType.DropDownStyle = ComboBoxStyle.DropDownList;
+            KeyLookType.Items.AddRange(options.ToArray());
+            controls.Add(KeyLookType);
 
             Label RememberToRemoveTPM = new Label();
             RememberToRemoveTPM.Location = new System.Drawing.Point(0, 120);

@@ -12,7 +12,7 @@ namespace CheckMaster.Modules
     [Serializable]
     class CheckFileExisting : MasterModule
     {
-        private String FILE_PATH;
+        private string FILE_PATH;
         private Status status;
 
         public CheckFileExisting()
@@ -57,7 +57,28 @@ namespace CheckMaster.Modules
         {
             List<Control> controls = new List<Control>();
 
+            // Full Filepath
+            Label FullFilepath = new Label();
+            FullFilepath.Location = new System.Drawing.Point(0,0);
+            FullFilepath.Width = 400;
+            FullFilepath.Text = "Full Filepath (Example: C:/Program Files/Office/EXCEL.exe)";
+            controls.Add(FullFilepath);
+
+            // Full Filepath Textbox
+            TextBox FullFilepathTextBox = new TextBox();
+            FullFilepathTextBox.Location = new System.Drawing.Point(0,25);
+            FullFilepathTextBox.Width = 200;
+            FullFilepathTextBox.Multiline = false;
+            FullFilepathTextBox.TextChanged += FullFilepathTextBox_TextChanged;
+            FullFilepathTextBox.Text = this.FILE_PATH;
+            controls.Add(FullFilepathTextBox);
+
             return controls.ToArray();
+        }
+
+        private void FullFilepathTextBox_TextChanged(object sender, EventArgs e)
+        {
+            this.FILE_PATH = ((TextBox)sender).Text;
         }
 
         public override string ToString()

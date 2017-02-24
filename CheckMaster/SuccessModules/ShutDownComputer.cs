@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 namespace CheckMaster.SuccessModules
 {
+    [Serializable]
     class ShutDownComputer : MasterSuccessModule
     {
         private int seconds;

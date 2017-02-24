@@ -16,6 +16,11 @@ namespace CheckMaster.Modules
         string[] getErrors();
         Control[] getEditControls();
 
+        #region Master
+        void updateDisplayValue();
+        string getName();
+        #endregion
+
         #region Restrictions
         void addRestriction(Restriction restriction);
         void addRestrictions(Restriction[] restrictions);

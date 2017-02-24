@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 namespace CheckMaster.Restrictions
 {
+    [Serializable]
     class ComputerSystemDoesntContain : Restriction
     {
         public string key;

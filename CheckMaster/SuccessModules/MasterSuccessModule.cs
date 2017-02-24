@@ -10,6 +10,7 @@ using CheckMaster.SuccessModules;
 
 namespace CheckMaster.SuccessModules
 {
+    [Serializable]
     class MasterSuccessModule : SuccessModule
     {
         private List<Restriction> restrictions = new List<Restriction>();

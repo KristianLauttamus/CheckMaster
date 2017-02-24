@@ -31,15 +31,15 @@
             this.editButton = new System.Windows.Forms.Button();
             this.loadSettingsButton = new System.Windows.Forms.Button();
             this.howManyRanLabel = new System.Windows.Forms.Label();
-            this.statusList = new System.Windows.Forms.ListBox();
             this.computerInfo = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.currentFileLabel = new System.Windows.Forms.Label();
+            this.statusList = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // editButton
             // 
-            this.editButton.Location = new System.Drawing.Point(13, 257);
+            this.editButton.Location = new System.Drawing.Point(5, 262);
             this.editButton.Name = "editButton";
             this.editButton.Size = new System.Drawing.Size(43, 23);
             this.editButton.TabIndex = 0;
@@ -49,7 +49,7 @@
             // 
             // loadSettingsButton
             // 
-            this.loadSettingsButton.Location = new System.Drawing.Point(62, 257);
+            this.loadSettingsButton.Location = new System.Drawing.Point(54, 262);
             this.loadSettingsButton.Name = "loadSettingsButton";
             this.loadSettingsButton.Size = new System.Drawing.Size(92, 23);
             this.loadSettingsButton.TabIndex = 1;
@@ -60,23 +60,11 @@
             // howManyRanLabel
             // 
             this.howManyRanLabel.AutoSize = true;
-            this.howManyRanLabel.Location = new System.Drawing.Point(13, 13);
+            this.howManyRanLabel.Location = new System.Drawing.Point(2, 9);
             this.howManyRanLabel.Name = "howManyRanLabel";
             this.howManyRanLabel.Size = new System.Drawing.Size(78, 13);
             this.howManyRanLabel.TabIndex = 2;
             this.howManyRanLabel.Text = "Ran 0 modules";
-            // 
-            // statusList
-            // 
-            this.statusList.BackColor = System.Drawing.SystemColors.Control;
-            this.statusList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.statusList.FormattingEnabled = true;
-            this.statusList.Location = new System.Drawing.Point(13, 56);
-            this.statusList.Name = "statusList";
-            this.statusList.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.statusList.Size = new System.Drawing.Size(166, 195);
-            this.statusList.TabIndex = 3;
-            this.statusList.TabStop = false;
             // 
             // computerInfo
             // 
@@ -102,21 +90,33 @@
             // currentFileLabel
             // 
             this.currentFileLabel.AutoSize = true;
-            this.currentFileLabel.Location = new System.Drawing.Point(160, 262);
+            this.currentFileLabel.Location = new System.Drawing.Point(152, 267);
             this.currentFileLabel.Name = "currentFileLabel";
             this.currentFileLabel.Size = new System.Drawing.Size(60, 13);
             this.currentFileLabel.TabIndex = 6;
             this.currentFileLabel.Text = "Current File";
+            // 
+            // statusList
+            // 
+            this.statusList.BackColor = System.Drawing.SystemColors.Control;
+            this.statusList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.statusList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.statusList.FormattingEnabled = true;
+            this.statusList.Location = new System.Drawing.Point(5, 39);
+            this.statusList.Name = "statusList";
+            this.statusList.Size = new System.Drawing.Size(443, 208);
+            this.statusList.TabIndex = 7;
+            this.statusList.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.StatusList_DrawItem);
             // 
             // CheckMasterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(460, 292);
+            this.Controls.Add(this.statusList);
             this.Controls.Add(this.currentFileLabel);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.computerInfo);
-            this.Controls.Add(this.statusList);
             this.Controls.Add(this.howManyRanLabel);
             this.Controls.Add(this.loadSettingsButton);
             this.Controls.Add(this.editButton);
@@ -127,7 +127,6 @@
             this.Text = "CheckMaster";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CheckMasterForm_FormClosing);
-            this.Load += new System.EventHandler(this.CheckMasterForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -138,10 +137,10 @@
         private System.Windows.Forms.Button editButton;
         private System.Windows.Forms.Button loadSettingsButton;
         private System.Windows.Forms.Label howManyRanLabel;
-        private System.Windows.Forms.ListBox statusList;
         private System.Windows.Forms.Button computerInfo;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Label currentFileLabel;
+        private System.Windows.Forms.ListBox statusList;
     }
 }
 

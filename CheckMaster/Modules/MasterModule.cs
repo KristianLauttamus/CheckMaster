@@ -9,9 +9,18 @@ using System.Windows.Forms;
 
 namespace CheckMaster.Modules
 {
+    [Serializable]
     class MasterModule : Module
     {
+        private static int lastID = 0;
+        private int ID = 0;
+        private string DisplayValue = "";
         private List<Restriction> restrictions = new List<Restriction>();
+
+        public MasterModule()
+        {
+            this.ID = ++lastID;
+        }
 
         public virtual void init()
         {
@@ -36,6 +45,24 @@ namespace CheckMaster.Modules
         public virtual Control[] getEditControls()
         {
             return new Control[0];
+        }
+
+        public virtual void updateDisplayValue()
+        {
+            String display = "[" + this.getStatus() + "] " + this.ToString();
+
+            foreach(string error in this.getErrors())
+            {
+                display += "\n - " + error;
+            }
+
+            this.DisplayValue = display;
+        }
+
+        public virtual string getName()
+        {
+            this.updateDisplayValue();
+            return this.DisplayValue;
         }
 
         #region Restrictions

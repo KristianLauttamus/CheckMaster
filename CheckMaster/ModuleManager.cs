@@ -37,6 +37,7 @@ namespace CheckMaster
             foreach (Module module in modules)
             {
                 module.check();
+                module.updateDisplayValue();
             }
         }
 

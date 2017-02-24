@@ -5,20 +5,40 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using CheckMaster.Restrictions;
+using System.Diagnostics;
 
 namespace CheckMaster.Modules
 {
+    [Serializable]
     class CheckBitlockerStatus : MasterModule
     {
         private Status status;
+        private Stopwatch stopwatch;
 
         public override void init()
         {
             this.status = Status.NOTRUN;
         }
 
+        /// <summary>
+        /// Run only once every 5 seconds, since WMI queries are resource hogs
+        /// </summary>
         public override void check()
         {
+            // Start stopwatch
+            if (stopwatch == null || stopwatch.IsRunning == false)
+            {
+                stopwatch = new Stopwatch();
+                stopwatch.Start();
+            }
+
+            // If under X amount of milliseconds, don't continue
+            if (stopwatch.ElapsedMilliseconds < 5000)
+            {
+                return;
+            }
+            
+            Console.WriteLine("Checking BitLocker status...");
             if (WMIController.checkBitLockerStatus())
             {
                 this.status = Status.OK;
@@ -27,6 +47,10 @@ namespace CheckMaster.Modules
             {
                 this.status = Status.FAIL;
             }
+
+            // Restart stopwatch, so that it doesn't have to be
+            // started again
+            stopwatch.Restart();
         }
 
         public override Control[] getEditControls()

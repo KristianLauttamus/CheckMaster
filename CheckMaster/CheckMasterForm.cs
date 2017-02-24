@@ -20,29 +20,87 @@ namespace CheckMaster
         Serializer serializer;
         ModuleManager moduleManager;
 
+        private List<int> sumTable;
+
         public CheckMasterForm()
         {
+            sumTable = new List<int>();
+            t = new Thread(UpdateLoop);
+
+            InitializeComponent();
+
             moduleManager = new ModuleManager();
             serializer = new CheckMaster.Serializer();
 
             // Check if default settings file exists
+            // Also initializes ModuleManager
             loadModuleManagerFromFile();
 
-            // Initialize Modules
-            moduleManager.init();
-
-            InitializeComponent();
-            
-            t = new Thread(UpdateLoop);
+            // Bind ModuleManager's modules as DataSource to our modules list
+            bindListBoxWithModules();
         }
-        
-        /// <summary>
-        /// Ease the way to start the update loop, since it needs to be stopped
-        /// everytime new modules are being loaded
-        /// </summary>
-        private void startUpdateLoop()
+
+        private void StatusList_DrawItem(object sender, DrawItemEventArgs e)
         {
-            t.Start();
+            this.statusList_MeasureItem(e.Index);
+
+            if (e.Index < 0 || sumTable.Count - 1 < e.Index)
+                return;
+
+            Console.WriteLine("Drawing item...");
+            Console.WriteLine(((Module)((ListBox)sender).Items[e.Index]).getName());
+
+            Color color = Color.Black;
+            switch (((Module)statusList.Items[e.Index]).getStatus())
+            {
+                case Status.ERROR:
+                    color = Color.Red;
+                    break;
+                case Status.FAIL:
+                    color = Color.Orange;
+                    break;
+                case Status.NOTRUN:
+                    color = Color.Gray;
+                    break;
+            }
+
+
+            int positionY = 0;
+            if (e.Index > 0)
+            {
+                positionY = sumTable[e.Index - 1];
+            }
+
+
+            // Background
+            e.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(0, positionY, 500, sumTable[e.Index]));
+
+            // Text itself
+            e.Graphics.DrawString(((Module)((ListBox)sender).Items[e.Index]).getName(), e.Font, new SolidBrush(color), 0, positionY, StringFormat.GenericDefault);
+        }
+
+        private void statusList_MeasureItem(int index)
+        {
+            if (index < 0)
+                return;
+
+            int amount = 0;
+            if (sumTable.Count - 1 < index && index > 0)
+            {
+                amount += sumTable[index - 1];
+            }
+
+            int heightToAdd = 25 + (25 * moduleManager.modules[index].getErrors().Length);
+            amount += heightToAdd;
+
+            if (sumTable.Count - 1 < index)
+            {
+                sumTable.Add(amount);
+            }
+            else
+            {
+                sumTable[index] = amount;
+            }
         }
 
         /// <summary>
@@ -54,14 +112,28 @@ namespace CheckMaster
             while (true)
             {
                 // Run checks
-                moduleManager.check();
+                try
+                {
+                    moduleManager.check();
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
 
                 // Access UI elements
                 MethodInvoker mi = delegate () {
-                    this.statusList.Items.Clear();
-                    this.statusList.Items.AddRange(moduleManager.getStatusesWithMessages());
-                    
-                    this.howManyRanLabel.Text = "Ran " + this.moduleManager.modules.Count + " modules";
+                    int howManyRan = 0;
+
+                    foreach (Module module in moduleManager.modules)
+                    {
+                        if (module.getStatus() != Status.NOTRUN)
+                        {
+                            howManyRan++;
+                        }
+                    }
+
+                    this.howManyRanLabel.Text = "Ran " + howManyRan + "/" + this.moduleManager.modules.Count + " modules";
 
                     if (moduleManager.failed())
                     {
@@ -80,12 +152,18 @@ namespace CheckMaster
             }
         }
 
-        /// <summary>
-        /// Easier the way to stop the update loop
-        /// </summary>
-        private void stopUpdateLoop()
+        private void bindListBoxWithModules()
         {
-            t.Abort();
+            this.statusList.DataBindings.Clear();
+            this.sumTable.Clear();
+
+            BindingSource bindingSource = new BindingSource();
+            bindingSource.DataSource = moduleManager.modules;
+
+            // this.statusList.DisplayMember = "ToString()";
+            this.statusList.DataSource = bindingSource;
+            this.statusList.DataBindings.Clear();
+            //this.statusList.DataBindings.Add("name", bindingSource, "DisplayValue", true, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void editButton_Click(object sender, EventArgs e)
@@ -110,14 +188,9 @@ namespace CheckMaster
             computerInfoForm.Show();
         }
 
-        private void CheckMasterForm_Load(object sender, EventArgs e)
-        {
-            startUpdateLoop();
-        }
-
         private void CheckMasterForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            stopUpdateLoop();
+            t.Abort();
         }
 
         private void okButton_Click(object sender, EventArgs e)
@@ -152,11 +225,20 @@ namespace CheckMaster
                 moduleManager = new ModuleManager();
                 Serializer.SerializeObject<ModuleManager>(moduleManager, Properties.Settings.Default["modulemanager"].ToString());
             }
+
+            this.moduleManager.init();
+
+            this.bindListBoxWithModules();
+
+            if(this.t.IsAlive == false)
+                t.Start();
         }
 
         private void loadSettingsButton_Click(object sender, EventArgs e)
         {
             this.moduleManager = FileSaver.loadDialog();
+
+            this.bindListBoxWithModules();
         }
     }
 }

@@ -60,6 +60,11 @@ namespace CheckMaster.FileDialogs
             if (((ComboBox)sender).SelectedIndex >= 0)
             {
                 this.file = ((ComboBox)sender).Items[((ComboBox)sender).SelectedIndex].ToString();
+                this.loadButton.Enabled = true;
+            }
+            else
+            {
+                this.loadButton.Enabled = false;
             }
         }
     }

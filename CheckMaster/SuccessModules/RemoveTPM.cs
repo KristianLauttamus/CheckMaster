@@ -8,6 +8,7 @@ using CheckMaster.Restrictions;
 
 namespace CheckMaster.SuccessModules
 {
+    [Serializable]
     class RemoveTPM : MasterSuccessModule
     {
         public override Control[] getEditControls()
