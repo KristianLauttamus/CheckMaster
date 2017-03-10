@@ -34,7 +34,7 @@
             this.computerInfo = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
             this.currentFileLabel = new System.Windows.Forms.Label();
-            this.statusList = new System.Windows.Forms.ListBox();
+            this.modulesLabelPanel = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // editButton
@@ -96,24 +96,21 @@
             this.currentFileLabel.TabIndex = 6;
             this.currentFileLabel.Text = "Current File";
             // 
-            // statusList
+            // modulesLabelPanel
             // 
-            this.statusList.BackColor = System.Drawing.SystemColors.Control;
-            this.statusList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.statusList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.statusList.FormattingEnabled = true;
-            this.statusList.Location = new System.Drawing.Point(5, 39);
-            this.statusList.Name = "statusList";
-            this.statusList.Size = new System.Drawing.Size(443, 208);
-            this.statusList.TabIndex = 7;
-            this.statusList.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.StatusList_DrawItem);
+            this.modulesLabelPanel.AutoScroll = true;
+            this.modulesLabelPanel.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.modulesLabelPanel.Location = new System.Drawing.Point(13, 32);
+            this.modulesLabelPanel.Name = "modulesLabelPanel";
+            this.modulesLabelPanel.Size = new System.Drawing.Size(435, 219);
+            this.modulesLabelPanel.TabIndex = 7;
             // 
             // CheckMasterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(460, 292);
-            this.Controls.Add(this.statusList);
+            this.Controls.Add(this.modulesLabelPanel);
             this.Controls.Add(this.currentFileLabel);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.computerInfo);
@@ -140,7 +137,7 @@
         private System.Windows.Forms.Button computerInfo;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Label currentFileLabel;
-        private System.Windows.Forms.ListBox statusList;
+        private System.Windows.Forms.Panel modulesLabelPanel;
     }
 }
 

@@ -83,5 +83,20 @@ namespace CheckMaster
 
             return statusesWithMessages.ToArray();
         }
+
+        public List<Module> getUnrestrictedModules()
+        {
+            List<Module> UnrestrictedModules = new List<Module>();
+
+            foreach (Module module in this.modules)
+            {
+                if (module.isRestricted() == false)
+                {
+                    UnrestrictedModules.Add(module);
+                }
+            }
+
+            return UnrestrictedModules;
+        }
     }
 }

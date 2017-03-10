@@ -35,72 +35,6 @@ namespace CheckMaster
             // Check if default settings file exists
             // Also initializes ModuleManager
             loadModuleManagerFromFile();
-
-            // Bind ModuleManager's modules as DataSource to our modules list
-            bindListBoxWithModules();
-        }
-
-        private void StatusList_DrawItem(object sender, DrawItemEventArgs e)
-        {
-            this.statusList_MeasureItem(e.Index);
-
-            if (e.Index < 0 || sumTable.Count - 1 < e.Index)
-                return;
-
-            Console.WriteLine("Drawing item...");
-            Console.WriteLine(((Module)((ListBox)sender).Items[e.Index]).getName());
-
-            Color color = Color.Black;
-            switch (((Module)statusList.Items[e.Index]).getStatus())
-            {
-                case Status.ERROR:
-                    color = Color.Red;
-                    break;
-                case Status.FAIL:
-                    color = Color.Orange;
-                    break;
-                case Status.NOTRUN:
-                    color = Color.Gray;
-                    break;
-            }
-
-
-            int positionY = 0;
-            if (e.Index > 0)
-            {
-                positionY = sumTable[e.Index - 1];
-            }
-
-
-            // Background
-            e.Graphics.FillRectangle(new SolidBrush(Color.Black), new Rectangle(0, positionY, 500, sumTable[e.Index]));
-
-            // Text itself
-            e.Graphics.DrawString(((Module)((ListBox)sender).Items[e.Index]).getName(), e.Font, new SolidBrush(color), 0, positionY, StringFormat.GenericDefault);
-        }
-
-        private void statusList_MeasureItem(int index)
-        {
-            if (index < 0)
-                return;
-
-            int amount = 0;
-            if (sumTable.Count - 1 < index && index > 0)
-            {
-                amount += sumTable[index - 1];
-            }
-
-            int heightToAdd = 25 + (25 * moduleManager.modules[index].getErrors().Length);
-            amount += heightToAdd;
-
-            if (sumTable.Count - 1 < index)
-            {
-                sumTable.Add(amount);
-            }
-            else
-            {
-                sumTable[index] = amount;
-            }
         }
 
         /// <summary>
@@ -125,7 +59,7 @@ namespace CheckMaster
                 MethodInvoker mi = delegate () {
                     int howManyRan = 0;
 
-                    foreach (Module module in moduleManager.modules)
+                    foreach (Module module in moduleManager.getUnrestrictedModules())
                     {
                         if (module.getStatus() != Status.NOTRUN)
                         {
@@ -133,7 +67,7 @@ namespace CheckMaster
                         }
                     }
 
-                    this.howManyRanLabel.Text = "Ran " + howManyRan + "/" + this.moduleManager.modules.Count + " modules";
+                    this.howManyRanLabel.Text = "Ran " + howManyRan + "/" + this.moduleManager.getUnrestrictedModules().Count + " modules";
 
                     if (moduleManager.failed())
                     {
@@ -146,24 +80,83 @@ namespace CheckMaster
 
                     // Update current file -label
                     this.currentFileLabel.Text = Properties.Settings.Default["modulemanager"].ToString();
+
+                    this.updateModuleLabels();
                 };
 
                 this.Invoke(mi);
             }
         }
 
-        private void bindListBoxWithModules()
+        private void updateModuleLabels()
         {
-            this.statusList.DataBindings.Clear();
-            this.sumTable.Clear();
+            // Check if no modules
+            if (this.moduleManager.getUnrestrictedModules().Count == 0)
+            {
+                return;
+            }
 
-            BindingSource bindingSource = new BindingSource();
-            bindingSource.DataSource = moduleManager.modules;
+            // Create
+            if (this.modulesLabelPanel.Controls.Count == 0 || this.modulesLabelPanel.Controls.Count != this.moduleManager.getUnrestrictedModules().Count) {
+                this.modulesLabelPanel.Controls.Clear();
 
-            // this.statusList.DisplayMember = "ToString()";
-            this.statusList.DataSource = bindingSource;
-            this.statusList.DataBindings.Clear();
-            //this.statusList.DataBindings.Add("name", bindingSource, "DisplayValue", true, DataSourceUpdateMode.OnPropertyChanged);
+                // Keep the current height
+                int currentHeight = 0;
+
+                foreach (Module module in this.moduleManager.getUnrestrictedModules())
+                {
+                    Label label = new Label();
+                    label.Text = module.getName();
+                    label.Width = 400;
+                    label.Height = calculateLabelheight(module);
+                    label.Location = new Point(0, currentHeight);
+                    label.ForeColor = ModuleColorByStatus(module);
+                    this.modulesLabelPanel.Controls.Add(label);
+
+                    currentHeight += label.Height;
+                }
+            }
+            else
+            {
+                int controlIndex = 0;
+                foreach (Module module in this.moduleManager.getUnrestrictedModules())
+                {
+                    if (this.modulesLabelPanel.Controls[controlIndex].Text != module.getName())
+                    {
+                        this.modulesLabelPanel.Controls[controlIndex].Text = module.getName();
+                        this.modulesLabelPanel.Controls[controlIndex].Height = calculateLabelheight(module);
+                        this.modulesLabelPanel.Controls[controlIndex].ForeColor = ModuleColorByStatus(module);
+                    }
+                    controlIndex++;
+                }
+            }
+        }
+
+        private Color ModuleColorByStatus(Module module)
+        {
+            switch (module.getStatus())
+            {
+                case Status.ERROR:
+                    return Color.Red;
+                case Status.FAIL:
+                    return Color.DarkRed;
+                case Status.OK:
+                    return Color.Green;
+                default:
+                    return Color.Gray;
+            }
+        }
+
+        private int calculateLabelheight(Module module)
+        {
+            // Check errors and update labelHeight
+            int labelHeight = 25;
+            foreach (string error in module.getErrors())
+            {
+                labelHeight += 25;
+            }
+
+            return labelHeight;
         }
 
         private void editButton_Click(object sender, EventArgs e)
@@ -227,8 +220,7 @@ namespace CheckMaster
             }
 
             this.moduleManager.init();
-
-            this.bindListBoxWithModules();
+            this.modulesLabelPanel.Controls.Clear();
 
             if(this.t.IsAlive == false)
                 t.Start();
@@ -237,8 +229,6 @@ namespace CheckMaster
         private void loadSettingsButton_Click(object sender, EventArgs e)
         {
             this.moduleManager = FileSaver.loadDialog();
-
-            this.bindListBoxWithModules();
         }
     }
 }

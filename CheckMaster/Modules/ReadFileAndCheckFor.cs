@@ -42,6 +42,7 @@ namespace CheckMaster.Modules
             this.FILE_PATH = "";
             this.status = Status.NOTRUN;
             this.errors = new List<string>();
+            this.rows = new List<ListBoxItem>();
             this.runOnCheck = false;
         }
 
@@ -338,6 +339,7 @@ namespace CheckMaster.Modules
                     while (sr.Peek() >= 0)
                     {
                         string line = sr.ReadLine();
+                        found = new Dictionary<ListBoxItem, bool>();
 
                         foreach (ListBoxItem item in this.rows)
                         {
