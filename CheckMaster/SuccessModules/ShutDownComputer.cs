@@ -91,9 +91,11 @@ namespace CheckMaster.SuccessModules
             {
                 forceOption = "/f ";
             }
+
             var psi = new ProcessStartInfo("shutdown", "/s "+forceOption+"/t " + this.seconds);
             psi.CreateNoWindow = true;
             psi.UseShellExecute = false;
+
             Process.Start(psi);
         }
 
